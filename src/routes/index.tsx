@@ -207,6 +207,8 @@ function HeroScene() {
             Scroll to look closer
           </span>
         </motion.div>
+
+        <LiveTicker />
       </motion.div>
 
       {/* Scroll indicator */}
@@ -216,6 +218,38 @@ function HeroScene() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 w-px h-12 bg-[oklch(0.22_0.018_265)] z-10"
       />
     </section>
+  );
+}
+
+function LiveTicker() {
+  const items = [
+    { k: "Habits logged today", v: "1,284" },
+    { k: "Goals on track", v: "73%" },
+    { k: "Median consistency", v: "66 days" },
+    { k: "Reflections written", v: "412" },
+    { k: "AI patterns surfaced", v: "37" },
+  ];
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 2.4, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      className="mt-16 w-full max-w-3xl overflow-hidden border-y border-[oklch(0.80_0.014_75)] bg-[oklch(0.95_0.010_75_/_0.5)] backdrop-blur-sm"
+    >
+      <motion.div
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        className="flex gap-12 py-3 whitespace-nowrap"
+      >
+        {[...items, ...items, ...items].map((it, i) => (
+          <span key={i} className="inline-flex items-center gap-3 font-mono text-[10px] tracking-[0.25em] uppercase text-[oklch(0.50_0.015_260)]">
+            <span className="w-1 h-1 rounded-full bg-[oklch(0.62_0.16_35)]" />
+            {it.k}
+            <span className="font-serif italic text-base text-[oklch(0.62_0.16_35)] normal-case tracking-normal">{it.v}</span>
+          </span>
+        ))}
+      </motion.div>
+    </motion.div>
   );
 }
 
