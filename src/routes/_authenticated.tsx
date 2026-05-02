@@ -7,6 +7,7 @@ import { RouteTransition } from "@/components/lucid/motion/RouteTransition";
 import { useStealth } from "@/lib/use-stealth";
 import { LayoutDashboard, Grid3x3, Target, BookText, Settings, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialProvider } from "@/components/lucid/tutorial/TutorialPopover";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthLayout,
@@ -51,8 +52,9 @@ function AuthLayout() {
   if (!session) return <Navigate to="/auth" />;
 
   return (
-    <div className="flex h-screen w-full bg-background overflow-hidden">
-      <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
+    <TutorialProvider>
+      <div className="flex h-screen w-full bg-background overflow-hidden">
+        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
 
       {/* Mobile drawer */}
       {mobileOpen && (
@@ -103,6 +105,7 @@ function AuthLayout() {
           </div>
         </main>
       </div>
-    </div>
+      </div>
+    </TutorialProvider>
   );
 }
