@@ -1,13 +1,26 @@
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
-import { useRef } from "react";
+import { lazy, Suspense, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { AtmosphericBackdrop } from "@/components/lucid/intro/AtmosphericScene";
 import { SceneBlock, DriftingChip } from "@/components/lucid/intro/IntroScenes";
-import { LiveMatrixPreview } from "@/components/lucid/intro/LiveMatrixPreview";
-import { ResearchSection, PillarsSection } from "@/components/lucid/intro/ResearchSection";
-import { FeatureTabs } from "@/components/lucid/intro/FeatureTabs";
 import { LUCID_TWEEN } from "@/components/lucid/motion/ease";
+
+// Below-the-fold — lazy load to keep initial bundle small + speed up FCP/TTI.
+const LiveMatrixPreview = lazy(() =>
+  import("@/components/lucid/intro/LiveMatrixPreview").then((m) => ({ default: m.LiveMatrixPreview })),
+);
+const ResearchSection = lazy(() =>
+  import("@/components/lucid/intro/ResearchSection").then((m) => ({ default: m.ResearchSection })),
+);
+const PillarsSection = lazy(() =>
+  import("@/components/lucid/intro/ResearchSection").then((m) => ({ default: m.PillarsSection })),
+);
+const FeatureTabs = lazy(() =>
+  import("@/components/lucid/intro/FeatureTabs").then((m) => ({ default: m.FeatureTabs })),
+);
+
+const SectionFallback = () => <div className="min-h-[60svh]" aria-hidden />;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -83,7 +96,9 @@ function LandingPage() {
       </Scene>
 
       {/* Feature tabs — what we offer at a glance */}
-      <FeatureTabs />
+      <Suspense fallback={<SectionFallback />}>
+        <FeatureTabs />
+      </Suspense>
 
       {/* Scene 3 — Habit Matrix with live preview */}
       <section id="habits" className="relative min-h-[90svh] flex items-center px-6 md:px-16 py-24">
@@ -94,15 +109,21 @@ function LandingPage() {
             body="A grid of small marks. Each cell a day, each row a habit. No streaks shouted at you, no confetti — just a clean record of who you've been showing up as."
             align="left"
           />
-          <LiveMatrixPreview />
+          <Suspense fallback={<SectionFallback />}>
+            <LiveMatrixPreview />
+          </Suspense>
         </div>
       </section>
 
       {/* Pillars — research-grounded mechanisms */}
-      <PillarsSection />
+      <Suspense fallback={<SectionFallback />}>
+        <PillarsSection />
+      </Suspense>
 
       {/* Research evidence */}
-      <ResearchSection />
+      <Suspense fallback={<SectionFallback />}>
+        <ResearchSection />
+      </Suspense>
 
       {/* Scene 4 — Goals */}
       <Scene align="right" id="goals">
