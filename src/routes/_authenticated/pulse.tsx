@@ -132,6 +132,7 @@ function PulsePage() {
       </RevealItem>
 
       {/* Trend chart */}
+      <RevealItem>
       <Panel title="Performance Trend" eyebrow="Last 7 days · Score vs Daily Completion">
         <div className="h-[280px] -mx-2">
           <ResponsiveContainer width="100%" height="100%">
@@ -182,7 +183,9 @@ function PulsePage() {
           </ResponsiveContainer>
         </div>
       </Panel>
+      </RevealItem>
 
+      <RevealItem>
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Today */}
         <Panel
@@ -274,9 +277,11 @@ function PulsePage() {
           )}
         </Panel>
       </div>
+      </RevealItem>
 
       {/* Last journal */}
       {pulse.lastJournal && (
+        <RevealItem>
         <Panel
           title="Last Entry"
           eyebrow={`Journal · ${pulse.lastJournal.entry_date}`}
@@ -299,8 +304,9 @@ function PulsePage() {
             </p>
           </div>
         </Panel>
+        </RevealItem>
       )}
-    </div>
+    </StaggerReveal>
   );
 }
 
