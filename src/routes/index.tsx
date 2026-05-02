@@ -4,6 +4,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { AtmosphericBackdrop } from "@/components/lucid/intro/AtmosphericScene";
 import { SceneBlock, DriftingChip } from "@/components/lucid/intro/IntroScenes";
+import { LiveMatrixPreview } from "@/components/lucid/intro/LiveMatrixPreview";
+import { ResearchSection, PillarsSection } from "@/components/lucid/intro/ResearchSection";
 import { LUCID_TWEEN } from "@/components/lucid/motion/ease";
 
 export const Route = createFileRoute("/")({
@@ -79,17 +81,24 @@ function LandingPage() {
         />
       </Scene>
 
-      {/* Scene 3 — Habit Matrix */}
-      <Scene align="left" id="habits">
-        <SceneBlock
-          eyebrow="The Matrix"
-          title="See your weeks the way time actually moves."
-          body="A grid of small marks. Each cell a day, each row a habit. No streaks shouted at you, no confetti — just a clean record of who you've been showing up as."
-          align="left"
-        />
-        <DriftingChip label="Consistency" value="73%" className="top-12 right-4 md:right-20" delay={0.4} />
-        <DriftingChip label="Active" value="6 habits" className="bottom-8 right-12 md:right-32" delay={0.6} />
-      </Scene>
+      {/* Scene 3 — Habit Matrix with live preview */}
+      <section id="habits" className="relative min-h-[90svh] flex items-center px-6 md:px-16 py-24">
+        <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <SceneBlock
+            eyebrow="The Matrix"
+            title="See your weeks the way time actually moves."
+            body="A grid of small marks. Each cell a day, each row a habit. No streaks shouted at you, no confetti — just a clean record of who you've been showing up as."
+            align="left"
+          />
+          <LiveMatrixPreview />
+        </div>
+      </section>
+
+      {/* Pillars — research-grounded mechanisms */}
+      <PillarsSection />
+
+      {/* Research evidence */}
+      <ResearchSection />
 
       {/* Scene 4 — Goals */}
       <Scene align="right" id="goals">
@@ -198,6 +207,8 @@ function HeroScene() {
             Scroll to look closer
           </span>
         </motion.div>
+
+        <LiveTicker />
       </motion.div>
 
       {/* Scroll indicator */}
@@ -207,6 +218,38 @@ function HeroScene() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 w-px h-12 bg-[oklch(0.22_0.018_265)] z-10"
       />
     </section>
+  );
+}
+
+function LiveTicker() {
+  const items = [
+    { k: "Habits logged today", v: "1,284" },
+    { k: "Goals on track", v: "73%" },
+    { k: "Median consistency", v: "66 days" },
+    { k: "Reflections written", v: "412" },
+    { k: "AI patterns surfaced", v: "37" },
+  ];
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 2.4, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      className="mt-16 w-full max-w-3xl overflow-hidden border-y border-[oklch(0.80_0.014_75)] bg-[oklch(0.95_0.010_75_/_0.5)] backdrop-blur-sm"
+    >
+      <motion.div
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        className="flex gap-12 py-3 whitespace-nowrap"
+      >
+        {[...items, ...items, ...items].map((it, i) => (
+          <span key={i} className="inline-flex items-center gap-3 font-mono text-[10px] tracking-[0.25em] uppercase text-[oklch(0.50_0.015_260)]">
+            <span className="w-1 h-1 rounded-full bg-[oklch(0.62_0.16_35)]" />
+            {it.k}
+            <span className="font-serif italic text-base text-[oklch(0.62_0.16_35)] normal-case tracking-normal">{it.v}</span>
+          </span>
+        ))}
+      </motion.div>
+    </motion.div>
   );
 }
 
