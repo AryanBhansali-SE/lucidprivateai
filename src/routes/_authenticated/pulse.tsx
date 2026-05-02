@@ -14,6 +14,7 @@ import { Check, ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { DailyPriorityPanel, PatternsPanel } from "@/components/lucid/InsightsPanels";
 
 export const Route = createFileRoute("/_authenticated/pulse")({
   head: () => ({
@@ -128,6 +129,14 @@ function PulsePage() {
               </div>
             </div>
           </div>
+        </div>
+      </RevealItem>
+
+      {/* AI Insights — Daily Priority + Patterns */}
+      <RevealItem>
+        <div className="grid lg:grid-cols-2 gap-6">
+          <DailyPriorityPanel />
+          <PatternsPanel />
         </div>
       </RevealItem>
 

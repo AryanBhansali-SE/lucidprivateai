@@ -18,6 +18,7 @@ import {
 import { Plus, X, Trash2, Check } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useInsights } from "@/components/lucid/InsightsPanels";
 
 export const Route = createFileRoute("/_authenticated/goals")({
   head: () => ({
@@ -35,6 +36,10 @@ function GoalsPage() {
   const [goals, setGoals] = useState<any[]>([]);
   const [creating, setCreating] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
+  const { data: insights } = useInsights();
+
+  const diagnosisFor = (goalId: string) =>
+    insights?.goal_diagnoses.find((d) => d.goal_id === goalId);
 
   const reload = useCallback(async () => {
     setGoals(await list());
@@ -71,29 +76,51 @@ function GoalsPage() {
           </div>
         ) : (
           <ul className="divide-y divide-hairline">
-            {goals.map((g) => (
-              <li key={g.id}>
-                <button
-                  onClick={() => setOpen(g.id)}
-                  className="w-full text-left px-5 py-5 hover:bg-graphite/30 transition-colors"
-                >
-                  <div className="flex items-baseline justify-between gap-4 mb-3">
-                    <div className="min-w-0">
-                      <h3 className="font-serif text-bone text-[17px] truncate">{g.title}</h3>
-                      <div className="label-cap mt-1">
-                        {g.kr_count} key result{g.kr_count !== 1 && "s"}
-                        {g.target_date && ` · target ${g.target_date}`}
-                        {g.status !== "active" && ` · ${g.status}`}
+            {goals.map((g) => {
+              const dx = diagnosisFor(g.id);
+              const dotColor =
+                dx?.status === "green"
+                  ? "bg-gold"
+                  : dx?.status === "amber"
+                    ? "bg-yellow-500"
+                    : dx?.status === "red"
+                      ? "bg-destructive"
+                      : "bg-hairline";
+              return (
+                <li key={g.id}>
+                  <button
+                    onClick={() => setOpen(g.id)}
+                    className="w-full text-left px-5 py-5 hover:bg-graphite/30 transition-colors"
+                  >
+                    <div className="flex items-baseline justify-between gap-4 mb-3">
+                      <div className="min-w-0 flex items-baseline gap-3">
+                        <span
+                          className={cn("inline-block h-2 w-2 rounded-full shrink-0", dotColor)}
+                          title={dx ? `${dx.status.toUpperCase()} · ${dx.verdict}` : "No diagnosis yet"}
+                        />
+                        <div className="min-w-0">
+                          <h3 className="font-serif text-bone text-[17px] truncate">{g.title}</h3>
+                          <div className="label-cap mt-1">
+                            {g.kr_count} key result{g.kr_count !== 1 && "s"}
+                            {g.target_date && ` · target ${g.target_date}`}
+                            {g.status !== "active" && ` · ${g.status}`}
+                          </div>
+                        </div>
                       </div>
+                      <span className="font-mono text-bone tabular text-sm shrink-0">
+                        {Math.round(g.progress * 100)}%
+                      </span>
                     </div>
-                    <span className="font-mono text-bone tabular text-sm shrink-0">
-                      {Math.round(g.progress * 100)}%
-                    </span>
-                  </div>
-                  <KPIBar value={g.progress} />
-                </button>
-              </li>
-            ))}
+                    <KPIBar value={g.progress} />
+                    {dx && (
+                      <div className="mt-3 text-xs text-ash italic leading-relaxed pl-5">
+                        {dx.verdict}
+                      </div>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </Panel>
