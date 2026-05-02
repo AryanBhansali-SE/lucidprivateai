@@ -2,19 +2,21 @@
 @source "../src";
 @import "tw-animate-css";
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap");
+
 @custom-variant dark (&:is(.dark *));
 
 /*
- * LUCID — Professional Professionalism
- * Minimalist, high-density, dark-first.
- * Mono accent (electric lime) on near-black surfaces.
+ * LUCID — Stealth Wealth
+ * Private banking terminal. No light mode.
+ * Obsidian, charcoal, graphite, hairline borders, brushed gold accent.
  */
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -36,137 +38,149 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
+  --color-obsidian: var(--obsidian);
+  --color-charcoal: var(--charcoal);
+  --color-graphite: var(--graphite);
+  --color-hairline: var(--hairline);
+  --color-bone: var(--bone);
+  --color-ash: var(--ash);
+  --color-gold: var(--gold);
+  --color-gold-dim: var(--gold-dim);
+  --color-gold-soft: var(--gold-soft);
 
-  --color-heat-0: var(--heat-0);
-  --color-heat-1: var(--heat-1);
-  --color-heat-2: var(--heat-2);
-  --color-heat-3: var(--heat-3);
-  --color-heat-4: var(--heat-4);
-
+  --font-serif: "Playfair Display", "Times New Roman", serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
-:root {
-  --radius: 0.5rem;
-
-  --background: oklch(0.985 0 0);
-  --foreground: oklch(0.18 0.01 260);
-  --surface: oklch(1 0 0);
-  --surface-2: oklch(0.97 0.005 260);
-
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.01 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.01 260);
-
-  --primary: oklch(0.82 0.19 130);
-  --primary-foreground: oklch(0.15 0.02 260);
-
-  --secondary: oklch(0.96 0.005 260);
-  --secondary-foreground: oklch(0.2 0.01 260);
-
-  --muted: oklch(0.96 0.005 260);
-  --muted-foreground: oklch(0.5 0.02 260);
-
-  --accent: oklch(0.94 0.02 130);
-  --accent-foreground: oklch(0.2 0.02 260);
-
-  --destructive: oklch(0.6 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
-
-  --success: oklch(0.72 0.17 150);
-  --warning: oklch(0.78 0.16 70);
-
-  --border: oklch(0.9 0.005 260);
-  --input: oklch(0.9 0.005 260);
-  --ring: oklch(0.82 0.19 130);
-
-  --heat-0: oklch(0.94 0.005 260);
-  --heat-1: oklch(0.88 0.07 130);
-  --heat-2: oklch(0.82 0.13 130);
-  --heat-3: oklch(0.74 0.17 130);
-  --heat-4: oklch(0.66 0.2 135);
-}
-
+:root,
 .dark {
-  --background: oklch(0.14 0.005 260);
-  --foreground: oklch(0.96 0.005 260);
-  --surface: oklch(0.17 0.006 260);
-  --surface-2: oklch(0.2 0.007 260);
+  --radius: 3px;
 
-  --card: oklch(0.17 0.006 260);
-  --card-foreground: oklch(0.96 0.005 260);
-  --popover: oklch(0.17 0.006 260);
-  --popover-foreground: oklch(0.96 0.005 260);
+  /* Stealth Wealth palette */
+  --obsidian: oklch(0.10 0 0);          /* #0A0A0A */
+  --charcoal: oklch(0.13 0 0);          /* #121212 */
+  --graphite: oklch(0.17 0 0);          /* #1A1A1A */
+  --hairline: oklch(0.24 0 0);          /* #2A2A2A */
+  --bone: oklch(0.92 0.005 80);         /* #E8E6E1 */
+  --ash: oklch(0.62 0.005 60);          /* #8B8680 */
+  --gold: oklch(0.78 0.13 85);          /* #D4AF37 brushed */
+  --gold-dim: oklch(0.62 0.10 85);
+  --gold-soft: oklch(0.78 0.13 85 / 0.12);
 
-  --primary: oklch(0.86 0.2 130);
-  --primary-foreground: oklch(0.15 0.02 260);
+  --background: var(--obsidian);
+  --foreground: var(--bone);
+  --card: var(--charcoal);
+  --card-foreground: var(--bone);
+  --popover: var(--charcoal);
+  --popover-foreground: var(--bone);
 
-  --secondary: oklch(0.22 0.008 260);
-  --secondary-foreground: oklch(0.96 0.005 260);
+  --primary: var(--gold);
+  --primary-foreground: var(--obsidian);
 
-  --muted: oklch(0.22 0.008 260);
-  --muted-foreground: oklch(0.65 0.015 260);
+  --secondary: var(--graphite);
+  --secondary-foreground: var(--bone);
 
-  --accent: oklch(0.25 0.02 130);
-  --accent-foreground: oklch(0.96 0.005 260);
+  --muted: var(--graphite);
+  --muted-foreground: var(--ash);
 
-  --destructive: oklch(0.65 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
+  --accent: var(--graphite);
+  --accent-foreground: var(--bone);
 
-  --success: oklch(0.78 0.17 150);
-  --warning: oklch(0.82 0.16 70);
+  --destructive: oklch(0.62 0.18 25);
+  --destructive-foreground: var(--bone);
 
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.86 0.2 130);
+  --border: var(--hairline);
+  --input: var(--hairline);
+  --ring: var(--gold);
 
-  --heat-0: oklch(0.22 0.008 260);
-  --heat-1: oklch(0.35 0.08 135);
-  --heat-2: oklch(0.5 0.13 132);
-  --heat-3: oklch(0.68 0.18 130);
-  --heat-4: oklch(0.86 0.2 130);
+  --sidebar: var(--charcoal);
+  --sidebar-foreground: var(--bone);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: var(--obsidian);
+  --sidebar-accent: var(--graphite);
+  --sidebar-accent-foreground: var(--bone);
+  --sidebar-border: var(--hairline);
+  --sidebar-ring: var(--gold);
 }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
+  html {
+    color-scheme: dark;
   }
 
-  html {
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    font-feature-settings: "cv11", "ss01", "ss03";
+  * {
+    border-color: var(--color-border);
   }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11", "tnum";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  .font-mono,
-  code,
-  kbd,
-  pre {
-    font-family: var(--font-mono);
+  ::selection {
+    background-color: var(--color-gold-soft);
+    color: var(--color-gold);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-charcoal);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-hairline);
+    border-radius: 0;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ash);
   }
 }
 
 @layer utilities {
-  .grid-bg {
-    background-image:
-      linear-gradient(to right, var(--color-border) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
-    background-size: 32px 32px;
+  .font-serif { font-family: var(--font-serif); }
+  .font-sans  { font-family: var(--font-sans); }
+  .font-mono  { font-family: var(--font-mono); }
+
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* Hairline divider */
+  .divider {
+    height: 1px;
+    background: var(--color-hairline);
   }
 
-  .text-balance {
-    text-wrap: balance;
+  /* Brushed gold subtle texture */
+  .brushed-gold {
+    background:
+      linear-gradient(135deg,
+        oklch(0.78 0.13 85) 0%,
+        oklch(0.85 0.13 85) 50%,
+        oklch(0.72 0.12 85) 100%);
+  }
+
+  .ring-gold-soft {
+    box-shadow: 0 0 0 1px var(--color-gold) inset;
+  }
+
+  /* Caps label used for metric labels */
+  .label-cap {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ash);
+  }
+
+  /* Number tween */
+  .num {
+    font-variant-numeric: tabular-nums;
+    transition: color 200ms ease;
   }
 }
