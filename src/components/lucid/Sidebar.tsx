@@ -32,6 +32,8 @@ export function Sidebar({
   onToggle: () => void;
 }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const { isSuperAdmin } = useRoles();
+  const items = isSuperAdmin ? [...NAV, ADMIN_NAV] : NAV;
 
   return (
     <aside
