@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { Panel, Stat, KPIBar } from "@/components/lucid/Panel";
 import { RadialScore } from "@/components/lucid/RadialScore";
+import { PulseRing } from "@/components/lucid/motion/PulseRing";
+import { CountUp } from "@/components/lucid/motion/CountUp";
+import { StaggerReveal, RevealItem } from "@/components/lucid/motion/StaggerReveal";
+import { useRealtimeFlash } from "@/lib/use-realtime-flash";
 import { useAuthedServerFn } from "@/lib/use-authed-server-fn";
 import { getPulse } from "@/server/pulse.functions";
 import { getTodayHabits, toggleHabitLog } from "@/server/habits.functions";
@@ -40,6 +44,12 @@ function PulsePage() {
   useEffect(() => {
     reload();
   }, [reload]);
+
+  // Realtime: when any tracked table changes, reload + bump tick to flash
+  const tick = useRealtimeFlash(
+    ["habit_logs", "goals", "key_results", "journal_entries"],
+    reload,
+  );
 
   if (!pulse || !today) return <PulseSkeleton />;
 
