@@ -195,6 +195,7 @@ function MatrixPage() {
     </div>
     </>
   );
+}
 
 function AddHabitSheet({
   onClose,
