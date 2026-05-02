@@ -22,9 +22,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Set up the listener FIRST so we never miss an event between
+    // getSession() resolving and the subscription attaching.
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
+      setLoading(false);
     });
+    // Then hydrate the initial session from storage.
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoading(false);
