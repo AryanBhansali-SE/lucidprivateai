@@ -64,7 +64,7 @@ export function Sidebar({
           <div className="px-3 mb-3 label-cap">Operations</div>
         )}
         <ul className="space-y-px">
-          {NAV.map((item) => {
+          {items.map((item) => {
             const active = path.startsWith(item.to);
             return (
               <li key={item.to}>
