@@ -7,9 +7,10 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * LUCID — Stealth Wealth
- * Private banking terminal. No light mode.
- * Obsidian, charcoal, graphite, hairline borders, brushed gold accent.
+ * LUCID — Kinetic Dawn
+ * Motivational performance terminal.
+ * Deep indigo base, warm bone surface, solar coral primary, amber glow.
+ * Token names preserved (gold/obsidian/etc.) so components don't need to change.
  */
 
 @theme inline {
@@ -57,16 +58,17 @@
 .dark {
   --radius: 3px;
 
-  /* Stealth Wealth palette */
-  --obsidian: oklch(0.10 0 0);          /* #0A0A0A */
-  --charcoal: oklch(0.13 0 0);          /* #121212 */
-  --graphite: oklch(0.17 0 0);          /* #1A1A1A */
-  --hairline: oklch(0.24 0 0);          /* #2A2A2A */
-  --bone: oklch(0.92 0.005 80);         /* #E8E6E1 */
-  --ash: oklch(0.62 0.005 60);          /* #8B8680 */
-  --gold: oklch(0.78 0.13 85);          /* #D4AF37 brushed */
-  --gold-dim: oklch(0.62 0.10 85);
-  --gold-soft: oklch(0.78 0.13 85 / 0.12);
+  /* Kinetic Dawn palette — warm, energizing, premium */
+  --obsidian: oklch(0.14 0.020 265);    /* deep indigo base */
+  --charcoal: oklch(0.18 0.022 265);    /* elevated surface */
+  --graphite: oklch(0.23 0.022 265);    /* card / muted */
+  --hairline: oklch(0.32 0.020 265);    /* hairline border */
+  --bone: oklch(0.96 0.012 75);         /* warm off-white text */
+  --ash: oklch(0.68 0.025 60);          /* warm muted text */
+  /* "gold" token name kept, but value is now Solar Coral */
+  --gold: oklch(0.72 0.19 35);          /* #FF6B47 solar coral */
+  --gold-dim: oklch(0.78 0.16 65);      /* amber glow secondary */
+  --gold-soft: oklch(0.72 0.19 35 / 0.14);
 
   --background: var(--obsidian);
   --foreground: var(--bone);
@@ -156,13 +158,13 @@
     background: var(--color-hairline);
   }
 
-  /* Brushed gold subtle texture */
+  /* Kinetic gradient — solar coral → amber (replaces brushed gold) */
   .brushed-gold {
     background:
       linear-gradient(135deg,
-        oklch(0.78 0.13 85) 0%,
-        oklch(0.85 0.13 85) 50%,
-        oklch(0.72 0.12 85) 100%);
+        oklch(0.72 0.19 35) 0%,
+        oklch(0.78 0.18 50) 50%,
+        oklch(0.82 0.16 70) 100%);
   }
 
   .ring-gold-soft {
