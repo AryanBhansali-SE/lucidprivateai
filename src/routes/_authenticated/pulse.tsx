@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { Panel, Stat, KPIBar } from "@/components/lucid/Panel";
 import { RadialScore } from "@/components/lucid/RadialScore";
+import { PulseRing } from "@/components/lucid/motion/PulseRing";
+import { CountUp } from "@/components/lucid/motion/CountUp";
+import { StaggerReveal, RevealItem } from "@/components/lucid/motion/StaggerReveal";
+import { useRealtimeFlash } from "@/lib/use-realtime-flash";
 import { useAuthedServerFn } from "@/lib/use-authed-server-fn";
 import { getPulse } from "@/server/pulse.functions";
 import { getTodayHabits, toggleHabitLog } from "@/server/habits.functions";
@@ -41,46 +45,94 @@ function PulsePage() {
     reload();
   }, [reload]);
 
+  // Realtime: when any tracked table changes, reload + bump tick to flash
+  const tick = useRealtimeFlash(
+    ["habit_logs", "goals", "key_results", "journal_entries"],
+    reload,
+  );
+
   if (!pulse || !today) return <PulseSkeleton />;
 
   const deltaIcon =
     pulse.delta > 0 ? ArrowUpRight : pulse.delta < 0 ? ArrowDownRight : Minus;
   const DeltaIcon = deltaIcon;
 
+  // Today's habit completion ratio drives the breath
+  const completionRatio =
+    today.habits.length > 0
+      ? today.habits.filter((h: any) => h.completed).length / today.habits.length
+      : 0;
+
   return (
-    <div className="space-y-6">
-      {/* Top strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-hairline border border-hairline">
-        <div className="bg-card p-5 md:p-6">
-          <Stat label="Consistency Score" value={pulse.todayScore} positive />
-        </div>
-        <div className="bg-card p-5 md:p-6">
-          <div className="label-cap mb-1.5">7-Day Delta</div>
-          <div className="flex items-baseline gap-1.5">
-            <DeltaIcon
-              className={cn(
-                "h-5 w-5",
-                pulse.delta > 0 && "text-gold",
-                pulse.delta < 0 && "text-destructive",
-                pulse.delta === 0 && "text-ash",
-              )}
-              strokeWidth={1.25}
+    <StaggerReveal className="space-y-6">
+      {/* Hero: Pulse ring */}
+      <RevealItem>
+        <div className="border border-border bg-card rounded-sm overflow-hidden">
+          <div className="grid md:grid-cols-[auto_1fr] gap-8 p-6 md:p-8 items-center">
+            <PulseRing
+              value={completionRatio}
+              size={240}
+              label="Today's Pulse"
+              sublabel={todayISO()}
             />
-            <span className="font-serif text-[34px] leading-none text-bone num">
-              {pulse.delta > 0 ? "+" : ""}
-              {pulse.delta}
-            </span>
+            <div className="space-y-6">
+              <div>
+                <div className="label-cap mb-1.5 lucid-eyebrow">Consistency Score</div>
+                <div className="flex items-baseline gap-2">
+                  <CountUp
+                    to={pulse.todayScore}
+                    trigger={`s-${tick}`}
+                    className="font-serif text-[64px] leading-none text-gold num"
+                  />
+                  <span className="text-ash text-lg font-mono">/ 100</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <div className="label-cap mb-1 lucid-eyebrow">7-Day Δ</div>
+                  <div className="flex items-baseline gap-1">
+                    <DeltaIcon
+                      className={cn(
+                        "h-4 w-4",
+                        pulse.delta > 0 && "text-gold",
+                        pulse.delta < 0 && "text-destructive",
+                        pulse.delta === 0 && "text-ash",
+                      )}
+                      strokeWidth={1.25}
+                    />
+                    <span className="font-serif text-[28px] leading-none text-bone num">
+                      {pulse.delta > 0 ? "+" : ""}
+                      <CountUp to={pulse.delta} trigger={`d-${tick}`} />
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <div className="label-cap mb-1 lucid-eyebrow">Objectives</div>
+                  <CountUp
+                    to={pulse.activeGoals}
+                    trigger={`g-${tick}`}
+                    className="font-serif text-[28px] leading-none text-bone num"
+                  />
+                </div>
+                <div>
+                  <div className="label-cap mb-1 lucid-eyebrow">Journal</div>
+                  <div className="flex items-baseline gap-1">
+                    <CountUp
+                      to={pulse.journalStreak}
+                      trigger={`j-${tick}`}
+                      className="font-serif text-[28px] leading-none text-bone num"
+                    />
+                    <span className="text-ash text-sm font-mono">d</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="bg-card p-5 md:p-6">
-          <Stat label="Active Objectives" value={pulse.activeGoals} />
-        </div>
-        <div className="bg-card p-5 md:p-6">
-          <Stat label="Journal Streak" value={pulse.journalStreak} unit="d" />
-        </div>
-      </div>
+      </RevealItem>
 
       {/* Trend chart */}
+      <RevealItem>
       <Panel title="Performance Trend" eyebrow="Last 7 days · Score vs Daily Completion">
         <div className="h-[280px] -mx-2">
           <ResponsiveContainer width="100%" height="100%">
@@ -131,7 +183,9 @@ function PulsePage() {
           </ResponsiveContainer>
         </div>
       </Panel>
+      </RevealItem>
 
+      <RevealItem>
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Today */}
         <Panel
@@ -223,9 +277,11 @@ function PulsePage() {
           )}
         </Panel>
       </div>
+      </RevealItem>
 
       {/* Last journal */}
       {pulse.lastJournal && (
+        <RevealItem>
         <Panel
           title="Last Entry"
           eyebrow={`Journal · ${pulse.lastJournal.entry_date}`}
@@ -248,8 +304,9 @@ function PulsePage() {
             </p>
           </div>
         </Panel>
+        </RevealItem>
       )}
-    </div>
+    </StaggerReveal>
   );
 }
 

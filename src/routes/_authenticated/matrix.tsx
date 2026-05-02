@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Panel } from "@/components/lucid/Panel";
 import { RadialScore } from "@/components/lucid/RadialScore";
+import { MagneticCell } from "@/components/lucid/motion/MagneticCell";
+import { CountUp } from "@/components/lucid/motion/CountUp";
+import { StaggerReveal, RevealItem } from "@/components/lucid/motion/StaggerReveal";
+import { useRealtimeFlash } from "@/lib/use-realtime-flash";
 import { useAuthedServerFn } from "@/lib/use-authed-server-fn";
 import { getMatrix, getScoreBundle, toggleHabitLog, createHabit } from "@/server/habits.functions";
 import { addDays, toISODate, todayISO } from "@/lib/date";
@@ -40,6 +44,8 @@ function MatrixPage() {
   useEffect(() => {
     reload();
   }, [reload]);
+
+  const tick = useRealtimeFlash(["habit_logs"], reload);
 
   const days = useMemo(() => {
     if (!data) return [];
@@ -97,17 +103,13 @@ function MatrixPage() {
                         const done = lookup.get(`${h.id}|${d}`);
                         return (
                           <td key={d} className="p-[1px]">
-                            <button
-                              onClick={async () => {
-                                await toggle({ data: { habit_id: h.id, log_date: d } });
-                                reload();
-                              }}
+                            <MagneticCell
+                              filled={!!done}
+                              opacity={TIER_OPACITY[h.tier] ?? 1}
                               title={`${d} · ${done ? "completed" : "—"}`}
-                              className={cn(
-                                "h-3.5 w-3.5 transition-all hover:ring-1 hover:ring-gold",
-                                done ? "bg-gold" : "bg-graphite",
-                              )}
-                              style={done ? { opacity: TIER_OPACITY[h.tier] ?? 1 } : undefined}
+                              onClick={() => {
+                                toggle({ data: { habit_id: h.id, log_date: d } });
+                              }}
                             />
                           </td>
                         );
@@ -124,6 +126,12 @@ function MatrixPage() {
           <Panel title="Consistency" eyebrow="30-day weighted">
             <div className="flex flex-col items-center">
               <RadialScore value={score.score} size={140} stroke={2} label="Score" />
+              <CountUp
+                to={score.score}
+                trigger={`m-${tick}`}
+                className="mt-2 font-mono text-[11px] text-ash tabular tracking-widest uppercase"
+                format={(n) => `${Math.round(n)}/100 weighted`}
+              />
             </div>
             <div className="mt-6 space-y-3">
               {score.tierBreakdown.map((t: any) => (

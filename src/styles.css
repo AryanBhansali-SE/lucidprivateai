@@ -183,4 +183,27 @@
     font-variant-numeric: tabular-nums;
     transition: color 200ms ease;
   }
+
+  /* Stealth Mode — hide chrome, keep data */
+  .lucid-stealth .label-cap,
+  .lucid-stealth .lucid-eyebrow,
+  .lucid-stealth .lucid-chrome {
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .lucid-stealth .lucid-panel-title {
+    opacity: 0.4;
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Realtime success flash */
+  @keyframes lucid-flash {
+    0%   { box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-gold) 60%, transparent); }
+    50%  { box-shadow: 0 0 18px 2px color-mix(in oklch, var(--color-gold) 65%, transparent); }
+    100% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-gold) 0%, transparent); }
+  }
+  .lucid-flash {
+    animation: lucid-flash 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 }
