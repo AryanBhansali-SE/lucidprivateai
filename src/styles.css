@@ -7,10 +7,10 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * LUCID — Kinetic Dawn
- * Motivational performance terminal.
- * Deep indigo base, warm bone surface, solar coral primary, amber glow.
- * Token names preserved (gold/obsidian/etc.) so components don't need to change.
+ * LUCID — Bone & Ink
+ * Editorial light theme. Bone/sand base, deep ink text,
+ * Solar Coral primary, subtle Iris secondary, amber glow.
+ * Token names preserved (gold/obsidian/etc.) so components don't change.
  */
 
 @theme inline {
@@ -58,17 +58,18 @@
 .dark {
   --radius: 3px;
 
-  /* Kinetic Dawn palette — warm, energizing, premium */
-  --obsidian: oklch(0.14 0.020 265);    /* deep indigo base */
-  --charcoal: oklch(0.18 0.022 265);    /* elevated surface */
-  --graphite: oklch(0.23 0.022 265);    /* card / muted */
-  --hairline: oklch(0.32 0.020 265);    /* hairline border */
-  --bone: oklch(0.96 0.012 75);         /* warm off-white text */
-  --ash: oklch(0.68 0.025 60);          /* warm muted text */
-  /* "gold" token name kept, but value is now Solar Coral */
-  --gold: oklch(0.72 0.19 35);          /* #FF6B47 solar coral */
-  --gold-dim: oklch(0.78 0.16 65);      /* amber glow secondary */
-  --gold-soft: oklch(0.72 0.19 35 / 0.14);
+  /* Bone & Ink palette — light, soft, bold */
+  /* Token names kept; semantics inverted to a light theme. */
+  --obsidian: oklch(0.95 0.008 75);     /* page base — bone/sand #F2EFE8 */
+  --charcoal: oklch(0.975 0.006 75);    /* elevated surface — porcelain #FBF9F4 */
+  --graphite: oklch(0.92 0.008 75);     /* muted surface */
+  --hairline: oklch(0.86 0.010 75);     /* hairline border, soft */
+  --bone: oklch(0.16 0.020 265);        /* deep ink text #0E1116 */
+  --ash: oklch(0.48 0.015 260);         /* secondary muted text */
+  /* "gold" token name kept; value is Solar Coral */
+  --gold: oklch(0.66 0.20 32);          /* solar coral #FF5A3C, slightly deeper for light bg contrast */
+  --gold-dim: oklch(0.58 0.18 290);     /* iris secondary for variety */
+  --gold-soft: oklch(0.66 0.20 32 / 0.12);
 
   --background: var(--obsidian);
   --foreground: var(--bone);
@@ -78,7 +79,7 @@
   --popover-foreground: var(--bone);
 
   --primary: var(--gold);
-  --primary-foreground: var(--obsidian);
+  --primary-foreground: oklch(0.98 0.005 75);  /* white-on-coral */
 
   --secondary: var(--graphite);
   --secondary-foreground: var(--bone);
@@ -99,7 +100,7 @@
   --sidebar: var(--charcoal);
   --sidebar-foreground: var(--bone);
   --sidebar-primary: var(--gold);
-  --sidebar-primary-foreground: var(--obsidian);
+  --sidebar-primary-foreground: oklch(0.98 0.005 75);
   --sidebar-accent: var(--graphite);
   --sidebar-accent-foreground: var(--bone);
   --sidebar-border: var(--hairline);
@@ -108,7 +109,7 @@
 
 @layer base {
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   * {
@@ -158,13 +159,13 @@
     background: var(--color-hairline);
   }
 
-  /* Kinetic gradient — solar coral → amber (replaces brushed gold) */
+  /* Kinetic gradient — coral → amber (used for highlights) */
   .brushed-gold {
     background:
       linear-gradient(135deg,
-        oklch(0.72 0.19 35) 0%,
-        oklch(0.78 0.18 50) 50%,
-        oklch(0.82 0.16 70) 100%);
+        oklch(0.66 0.20 32) 0%,
+        oklch(0.74 0.18 50) 50%,
+        oklch(0.80 0.16 70) 100%);
   }
 
   .ring-gold-soft {
