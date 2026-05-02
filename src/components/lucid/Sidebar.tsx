@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Grid3x3, Target, BookText, Settings, ChevronsLeft, ChevronsRight, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Grid3x3, Target, BookText, Settings, ChevronsLeft, ChevronsRight, ShieldCheck, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRoles } from "@/lib/use-roles";
 
@@ -15,6 +15,7 @@ const NAV: NavItem[] = [
   { to: "/matrix", label: "Habit Matrix", icon: Grid3x3, glyph: "II" },
   { to: "/goals", label: "Objectives", icon: Target, glyph: "III" },
   { to: "/journal", label: "Journal", icon: BookText, glyph: "IV" },
+  { to: "/calendar", label: "Calendar", icon: CalendarDays, glyph: "V" },
 ];
 
 const ADMIN_NAV: NavItem = {

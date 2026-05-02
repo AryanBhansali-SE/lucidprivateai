@@ -47,6 +47,45 @@ export type Database = {
         }
         Relationships: []
       }
+      calendar_connections: {
+        Row: {
+          access_token: string
+          created_at: string
+          expires_at: string
+          google_email: string | null
+          id: string
+          provider: string
+          refresh_token: string
+          scope: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token: string
+          created_at?: string
+          expires_at: string
+          google_email?: string | null
+          id?: string
+          provider?: string
+          refresh_token: string
+          scope?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string
+          created_at?: string
+          expires_at?: string
+          google_email?: string | null
+          id?: string
+          provider?: string
+          refresh_token?: string
+          scope?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string
@@ -268,6 +307,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      oauth_states: {
+        Row: {
+          created_at: string
+          provider: string
+          redirect_to: string | null
+          state: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          provider?: string
+          redirect_to?: string | null
+          state: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          provider?: string
+          redirect_to?: string | null
+          state?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
