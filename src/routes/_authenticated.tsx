@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { Sidebar } from "@/components/lucid/Sidebar";
 import { Header } from "@/components/lucid/Header";
+import { RouteTransition } from "@/components/lucid/motion/RouteTransition";
+import { useStealth } from "@/lib/use-stealth";
 import { LayoutDashboard, Grid3x3, Target, BookText, Settings, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,7 +22,7 @@ const NAV = [
 
 function AuthLayout() {
   const { session, loading } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useStealth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
 
@@ -92,9 +94,11 @@ function AuthLayout() {
           collapsed={collapsed}
           onMobileMenu={() => setMobileOpen(true)}
         />
-        <main className="flex-1 overflow-y-auto">
+        <main className={cn("flex-1 overflow-y-auto", collapsed && "lucid-stealth")}>
           <div className="px-5 md:px-8 py-6 md:py-8 max-w-[1400px] mx-auto">
-            <Outlet />
+            <RouteTransition>
+              <Outlet />
+            </RouteTransition>
           </div>
         </main>
       </div>
