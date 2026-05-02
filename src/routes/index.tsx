@@ -249,7 +249,7 @@ function LiveTicker() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 2.4, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ delay: 0.6, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="mt-16 w-full max-w-3xl overflow-hidden border-y border-[oklch(0.80_0.014_75)] bg-[oklch(0.95_0.010_75_/_0.5)] backdrop-blur-sm"
     >
       <motion.div
