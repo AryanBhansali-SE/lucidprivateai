@@ -4,6 +4,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { AtmosphericBackdrop } from "@/components/lucid/intro/AtmosphericScene";
 import { SceneBlock, DriftingChip } from "@/components/lucid/intro/IntroScenes";
+import { LiveMatrixPreview } from "@/components/lucid/intro/LiveMatrixPreview";
+import { ResearchSection, PillarsSection } from "@/components/lucid/intro/ResearchSection";
 import { LUCID_TWEEN } from "@/components/lucid/motion/ease";
 
 export const Route = createFileRoute("/")({
@@ -79,17 +81,24 @@ function LandingPage() {
         />
       </Scene>
 
-      {/* Scene 3 — Habit Matrix */}
-      <Scene align="left" id="habits">
-        <SceneBlock
-          eyebrow="The Matrix"
-          title="See your weeks the way time actually moves."
-          body="A grid of small marks. Each cell a day, each row a habit. No streaks shouted at you, no confetti — just a clean record of who you've been showing up as."
-          align="left"
-        />
-        <DriftingChip label="Consistency" value="73%" className="top-12 right-4 md:right-20" delay={0.4} />
-        <DriftingChip label="Active" value="6 habits" className="bottom-8 right-12 md:right-32" delay={0.6} />
-      </Scene>
+      {/* Scene 3 — Habit Matrix with live preview */}
+      <section id="habits" className="relative min-h-[90svh] flex items-center px-6 md:px-16 py-24">
+        <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <SceneBlock
+            eyebrow="The Matrix"
+            title="See your weeks the way time actually moves."
+            body="A grid of small marks. Each cell a day, each row a habit. No streaks shouted at you, no confetti — just a clean record of who you've been showing up as."
+            align="left"
+          />
+          <LiveMatrixPreview />
+        </div>
+      </section>
+
+      {/* Pillars — research-grounded mechanisms */}
+      <PillarsSection />
+
+      {/* Research evidence */}
+      <ResearchSection />
 
       {/* Scene 4 — Goals */}
       <Scene align="right" id="goals">
