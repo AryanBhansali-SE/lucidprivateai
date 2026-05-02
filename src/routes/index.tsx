@@ -177,10 +177,11 @@ function HeroScene() {
     <section ref={ref} className="relative min-h-[100svh] flex items-center justify-center px-6">
       <motion.div style={{ y, opacity }} className="relative z-10 flex flex-col items-center text-center max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, letterSpacing: "1em" }}
-          animate={{ opacity: 1, letterSpacing: "0.3em" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1] }}
           className="font-mono text-[11px] uppercase text-[oklch(0.50_0.015_260)] mb-8"
+          style={{ letterSpacing: "0.3em" }}
         >
           A Private Performance Terminal
         </motion.div>
