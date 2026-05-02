@@ -6,6 +6,7 @@ import { AtmosphericBackdrop } from "@/components/lucid/intro/AtmosphericScene";
 import { SceneBlock, DriftingChip } from "@/components/lucid/intro/IntroScenes";
 import { LiveMatrixPreview } from "@/components/lucid/intro/LiveMatrixPreview";
 import { ResearchSection, PillarsSection } from "@/components/lucid/intro/ResearchSection";
+import { FeatureTabs } from "@/components/lucid/intro/FeatureTabs";
 import { LUCID_TWEEN } from "@/components/lucid/motion/ease";
 
 export const Route = createFileRoute("/")({
