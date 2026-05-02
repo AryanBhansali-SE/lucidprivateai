@@ -93,6 +93,7 @@ function AuthLayout() {
         <Header
           collapsed={collapsed}
           onMobileMenu={() => setMobileOpen(true)}
+          onToggleStealth={() => setCollapsed((c) => !c)}
         />
         <main className={cn("flex-1 overflow-y-auto", collapsed && "lucid-stealth")}>
           <div className="px-5 md:px-8 py-6 md:py-8 max-w-[1400px] mx-auto">

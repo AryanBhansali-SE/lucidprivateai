@@ -67,9 +67,22 @@ export function Header({
       <div className="flex-1" />
 
       <div className="hidden sm:flex items-center gap-5">
+        {onToggleStealth && (
+          <button
+            onClick={onToggleStealth}
+            title={collapsed ? "Exit stealth mode (⌘.)" : "Enter stealth mode (⌘.)"}
+            className="h-8 w-8 grid place-items-center rounded-sm text-ash hover:text-gold transition-colors"
+          >
+            {collapsed ? (
+              <EyeOff className="h-4 w-4" strokeWidth={1.25} />
+            ) : (
+              <Eye className="h-4 w-4" strokeWidth={1.25} />
+            )}
+          </button>
+        )}
         <div className="text-right">
           <div className="font-mono text-xs text-ash leading-tight">{time}</div>
-          <div className="label-cap leading-tight">Local</div>
+          <div className="label-cap leading-tight lucid-eyebrow">Local</div>
         </div>
         <div className="h-7 w-px bg-hairline" />
         <div className="flex items-center gap-2.5">
