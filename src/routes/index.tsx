@@ -84,11 +84,6 @@ function LandingPage() {
 
       {/* Feature tabs — what we offer at a glance */}
       <FeatureTabs />
-          eyebrow="A new kind of terminal"
-          title="Quiet instruments for the inner life."
-          body="Most apps shout. Lucid keeps its voice down. A measured, banking-grade interface for the things that actually compound — habits, objectives, and the words you write to yourself."
-        />
-      </Scene>
 
       {/* Scene 3 — Habit Matrix with live preview */}
       <section id="habits" className="relative min-h-[90svh] flex items-center px-6 md:px-16 py-24">
