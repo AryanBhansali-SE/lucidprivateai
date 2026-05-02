@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Grid3x3, Target, BookText, Settings, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { LayoutDashboard, Grid3x3, Target, BookText, Settings, ChevronsLeft, ChevronsRight, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRoles } from "@/lib/use-roles";
 
 interface NavItem {
   to: string;
@@ -16,6 +17,13 @@ const NAV: NavItem[] = [
   { to: "/journal", label: "Journal", icon: BookText, glyph: "IV" },
 ];
 
+const ADMIN_NAV: NavItem = {
+  to: "/admin",
+  label: "Sovereign",
+  icon: ShieldCheck,
+  glyph: "Σ",
+};
+
 export function Sidebar({
   collapsed,
   onToggle,
@@ -24,6 +32,8 @@ export function Sidebar({
   onToggle: () => void;
 }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const { isSuperAdmin } = useRoles();
+  const items = isSuperAdmin ? [...NAV, ADMIN_NAV] : NAV;
 
   return (
     <aside
@@ -54,7 +64,7 @@ export function Sidebar({
           <div className="px-3 mb-3 label-cap">Operations</div>
         )}
         <ul className="space-y-px">
-          {NAV.map((item) => {
+          {items.map((item) => {
             const active = path.startsWith(item.to);
             return (
               <li key={item.to}>
