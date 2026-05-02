@@ -4,23 +4,24 @@ import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Wraps useServerFn to inject the current Supabase access token as a
- * Bearer header. Server functions guarded by `requireSupabaseAuth` need this.
+ * Bearer Authorization header. Server functions guarded by `requireSupabaseAuth`
+ * need this since their middleware reads the request's authorization header.
  */
-export function useAuthedServerFn<TFn extends (...args: any[]) => any>(fn: TFn): TFn {
+export function useAuthedServerFn<
+  TFn extends (opts?: { data?: any; headers?: HeadersInit }) => Promise<any>,
+>(fn: TFn) {
   const wrapped = useTanServerFn(fn);
   return useCallback(
-    (async (input?: any) => {
-      const { data } = await supabase.auth.getSession();
-      const token = data.session?.access_token;
-      const args = input ?? {};
-      return wrapped({
-        ...args,
-        headers: {
-          ...(args.headers ?? {}),
-          ...(token ? { authorization: `Bearer ${token}` } : {}),
-        },
+    async (input?: { data?: any; headers?: HeadersInit }) => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      const headers = new Headers(input?.headers);
+      if (token) headers.set("authorization", `Bearer ${token}`);
+      return (wrapped as any)({
+        ...(input ?? {}),
+        headers,
       });
-    }) as unknown as TFn,
+    },
     [wrapped],
-  );
+  ) as TFn;
 }
