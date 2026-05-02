@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
+import { Menu, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { formatLong } from "@/lib/date";
 import { cn } from "@/lib/utils";
@@ -16,9 +16,11 @@ const titles: Record<string, string> = {
 export function Header({
   onMobileMenu,
   collapsed,
+  onToggleStealth,
 }: {
   onMobileMenu: () => void;
   collapsed: boolean;
+  onToggleStealth?: () => void;
 }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useAuth();
