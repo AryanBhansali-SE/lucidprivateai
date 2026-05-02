@@ -14,16 +14,262 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      goals: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          sort_order: number
+          status: Database["public"]["Enums"]["goal_status"]
+          target_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          sort_order?: number
+          status?: Database["public"]["Enums"]["goal_status"]
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          sort_order?: number
+          status?: Database["public"]["Enums"]["goal_status"]
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      habit_logs: {
+        Row: {
+          completed: boolean
+          created_at: string
+          habit_id: string
+          id: string
+          log_date: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          habit_id: string
+          id?: string
+          log_date: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          habit_id?: string
+          id?: string
+          log_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_logs_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habits: {
+        Row: {
+          archived_at: string | null
+          break_penalty: boolean
+          created_at: string
+          id: string
+          name: string
+          sort_order: number
+          tier: Database["public"]["Enums"]["habit_tier"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          archived_at?: string | null
+          break_penalty?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          sort_order?: number
+          tier?: Database["public"]["Enums"]["habit_tier"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          archived_at?: string | null
+          break_penalty?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          sort_order?: number
+          tier?: Database["public"]["Enums"]["habit_tier"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      journal_entries: {
+        Row: {
+          content_md: string
+          created_at: string
+          entry_date: string
+          id: string
+          key_takeaways: string | null
+          sentiment: Database["public"]["Enums"]["sentiment"] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content_md?: string
+          created_at?: string
+          entry_date: string
+          id?: string
+          key_takeaways?: string | null
+          sentiment?: Database["public"]["Enums"]["sentiment"] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content_md?: string
+          created_at?: string
+          entry_date?: string
+          id?: string
+          key_takeaways?: string | null
+          sentiment?: Database["public"]["Enums"]["sentiment"] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      key_result_items: {
+        Row: {
+          created_at: string
+          done: boolean
+          id: string
+          key_result_id: string
+          label: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          key_result_id: string
+          label: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          key_result_id?: string
+          label?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "key_result_items_key_result_id_fkey"
+            columns: ["key_result_id"]
+            isOneToOne: false
+            referencedRelation: "key_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      key_results: {
+        Row: {
+          created_at: string
+          current_value: number | null
+          goal_id: string
+          id: string
+          kind: Database["public"]["Enums"]["kr_kind"]
+          sort_order: number
+          target_value: number | null
+          title: string
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_value?: number | null
+          goal_id: string
+          id?: string
+          kind?: Database["public"]["Enums"]["kr_kind"]
+          sort_order?: number
+          target_value?: number | null
+          title: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_value?: number | null
+          goal_id?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["kr_kind"]
+          sort_order?: number
+          target_value?: number | null
+          title?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "key_results_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      user_owns_goal: { Args: { _goal_id: string }; Returns: boolean }
+      user_owns_key_result: { Args: { _kr_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      goal_status: "active" | "paused" | "achieved" | "archived"
+      habit_tier: "keystone" | "core" | "supporting"
+      kr_kind: "numeric" | "checklist"
+      sentiment: "focused" | "steady" | "drifting" | "depleted" | "energized"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +396,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      goal_status: ["active", "paused", "achieved", "archived"],
+      habit_tier: ["keystone", "core", "supporting"],
+      kr_kind: ["numeric", "checklist"],
+      sentiment: ["focused", "steady", "drifting", "depleted", "energized"],
+    },
   },
 } as const
