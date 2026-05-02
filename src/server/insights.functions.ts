@@ -41,9 +41,9 @@ export const getInsights = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     if (!data) return null;
     return {
-      daily_priority: data.daily_priority as DailyPriority,
-      patterns: data.patterns as PatternInsight[],
-      goal_diagnoses: data.goal_diagnoses as GoalDiagnosis[],
+      daily_priority: data.daily_priority as unknown as DailyPriority,
+      patterns: data.patterns as unknown as PatternInsight[],
+      goal_diagnoses: data.goal_diagnoses as unknown as GoalDiagnosis[],
       generated_at: data.generated_at as string,
     };
   });
@@ -68,9 +68,9 @@ export const generateInsights = createServerFn({ method: "POST" })
         const ageMs = Date.now() - new Date(cached.generated_at as string).getTime();
         if (ageMs < STALE_AFTER_HOURS * 3600 * 1000) {
           return {
-            daily_priority: cached.daily_priority as DailyPriority,
-            patterns: cached.patterns as PatternInsight[],
-            goal_diagnoses: cached.goal_diagnoses as GoalDiagnosis[],
+            daily_priority: cached.daily_priority as unknown as DailyPriority,
+            patterns: cached.patterns as unknown as PatternInsight[],
+            goal_diagnoses: cached.goal_diagnoses as unknown as GoalDiagnosis[],
             generated_at: cached.generated_at as string,
           };
         }
@@ -299,13 +299,15 @@ Sentences should be short and observation-led. No emoji. Today is ${today}.`;
     const { error: upsertErr } = await supabase
       .from("ai_insights")
       .upsert(
-        {
-          user_id: userId,
-          daily_priority: parsed.daily_priority,
-          patterns: parsed.patterns,
-          goal_diagnoses: parsed.goal_diagnoses,
-          generated_at: generatedAt,
-        },
+        [
+          {
+            user_id: userId,
+            daily_priority: parsed.daily_priority as unknown as Record<string, unknown>,
+            patterns: parsed.patterns as unknown as Record<string, unknown>,
+            goal_diagnoses: parsed.goal_diagnoses as unknown as Record<string, unknown>,
+            generated_at: generatedAt,
+          },
+        ],
         { onConflict: "user_id" },
       );
     if (upsertErr) throw new Error(upsertErr.message);
