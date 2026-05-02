@@ -198,7 +198,7 @@ function HeroScene() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="font-sans text-lg md:text-xl text-[oklch(0.40_0.015_260)] max-w-xl leading-relaxed mb-12"
         >
           A quiet place to track habits, objectives, and the words you write to yourself.
@@ -209,7 +209,7 @@ function HeroScene() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay: 0.4, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col items-center gap-3"
         >
           <Link
