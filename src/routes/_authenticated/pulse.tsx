@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { DailyPriorityPanel, PatternsPanel } from "@/components/lucid/InsightsPanels";
+import { TutorialPopover } from "@/components/lucid/tutorial/TutorialPopover";
 
 export const Route = createFileRoute("/_authenticated/pulse")({
   head: () => ({
@@ -65,7 +66,14 @@ function PulsePage() {
       : 0;
 
   return (
-    <StaggerReveal className="space-y-6">
+    <>
+      <TutorialPopover
+        tutorialKey="pulse"
+        title="This is your Pulse."
+        body="Your last 7 days at a glance — habit completion, objective health, and a single AI-surfaced priority for today."
+        position="bottom-right"
+      />
+      <StaggerReveal className="space-y-6">
       {/* Hero: Pulse ring */}
       <RevealItem>
         <div className="border border-border bg-card rounded-sm overflow-hidden">
