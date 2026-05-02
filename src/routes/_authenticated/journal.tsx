@@ -7,6 +7,7 @@ import { todayISO, formatLong } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { marked } from "marked";
+import { TutorialPopover } from "@/components/lucid/tutorial/TutorialPopover";
 
 export const Route = createFileRoute("/_authenticated/journal")({
   head: () => ({
@@ -25,7 +26,14 @@ function JournalPage() {
   const [mode, setMode] = useState<"write" | "review">("write");
 
   return (
-    <div className="space-y-6">
+    <>
+      <TutorialPopover
+        tutorialKey="journal"
+        title="The Journal."
+        body="Write freely. Lucid scores sentiment and surfaces themes. Switch to Review to see the patterns over time."
+        position="bottom-right"
+      />
+      <div className="space-y-6">
       <div className="flex items-baseline justify-between">
         <div>
           <div className="label-cap mb-1">Journal of Record</div>
@@ -51,6 +59,7 @@ function JournalPage() {
 
       {mode === "write" ? <WriteMode /> : <ReviewMode />}
     </div>
+    </>
   );
 }
 

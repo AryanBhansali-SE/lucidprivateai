@@ -27,7 +27,7 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && session) navigate({ to: "/pulse" });
+    if (!loading && session) navigate({ to: "/welcome" });
   }, [session, loading, navigate]);
 
   async function submit(e: React.FormEvent) {
@@ -43,7 +43,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/pulse` },
+          options: { emailRedirectTo: `${window.location.origin}/welcome` },
         });
         if (error) throw error;
         toast.success("Account created");

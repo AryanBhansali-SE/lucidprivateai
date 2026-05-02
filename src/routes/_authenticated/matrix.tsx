@@ -12,6 +12,7 @@ import { addDays, toISODate, todayISO } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import { Plus, X } from "lucide-react";
 import { toast } from "sonner";
+import { TutorialPopover } from "@/components/lucid/tutorial/TutorialPopover";
 
 export const Route = createFileRoute("/_authenticated/matrix")({
   head: () => ({
@@ -64,7 +65,14 @@ function MatrixPage() {
   if (!data || !score) return <div className="h-96 bg-card border border-border animate-pulse" />;
 
   return (
-    <div className="space-y-6">
+    <>
+      <TutorialPopover
+        tutorialKey="matrix"
+        title="Your Habit Matrix."
+        body="Each row is a habit, each cell a day. Click any cell to toggle. Keystone habits weigh more in your overall score."
+        position="bottom-right"
+      />
+      <div className="space-y-6">
       <div className="grid lg:grid-cols-[1fr_320px] gap-6">
         <Panel
           title="Habit Matrix"
@@ -185,6 +193,7 @@ function MatrixPage() {
         />
       )}
     </div>
+    </>
   );
 }
 

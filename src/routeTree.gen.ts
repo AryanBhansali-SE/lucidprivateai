@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminBootstrapRouteImport } from './routes/admin-bootstrap'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
@@ -20,6 +21,11 @@ import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedGoalsRouteImport } from './routes/_authenticated/goals'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-bootstrap': typeof AdminBootstrapRoute
   '/auth': typeof AuthRoute
+  '/welcome': typeof WelcomeRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/goals': typeof AuthenticatedGoalsRoute
   '/journal': typeof AuthenticatedJournalRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-bootstrap': typeof AdminBootstrapRoute
   '/auth': typeof AuthRoute
+  '/welcome': typeof WelcomeRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/goals': typeof AuthenticatedGoalsRoute
   '/journal': typeof AuthenticatedJournalRoute
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/admin-bootstrap': typeof AdminBootstrapRoute
   '/auth': typeof AuthRoute
+  '/welcome': typeof WelcomeRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/goals': typeof AuthenticatedGoalsRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-bootstrap'
     | '/auth'
+    | '/welcome'
     | '/admin'
     | '/goals'
     | '/journal'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-bootstrap'
     | '/auth'
+    | '/welcome'
     | '/admin'
     | '/goals'
     | '/journal'
@@ -134,6 +145,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/admin-bootstrap'
     | '/auth'
+    | '/welcome'
     | '/_authenticated/admin'
     | '/_authenticated/goals'
     | '/_authenticated/journal'
@@ -147,10 +159,18 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AdminBootstrapRoute: typeof AdminBootstrapRoute
   AuthRoute: typeof AuthRoute
+  WelcomeRoute: typeof WelcomeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -251,6 +271,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdminBootstrapRoute: AdminBootstrapRoute,
   AuthRoute: AuthRoute,
+  WelcomeRoute: WelcomeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
