@@ -45,6 +45,8 @@ function MatrixPage() {
     reload();
   }, [reload]);
 
+  const tick = useRealtimeFlash(["habit_logs"], reload);
+
   const days = useMemo(() => {
     if (!data) return [];
     const arr: string[] = [];
