@@ -1,57 +1,44 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
-
-function getClient(token?: string) {
-  const url = process.env.VITE_SUPABASE_URL!;
-  const anon = process.env.VITE_SUPABASE_PUBLISHABLE_KEY!;
-  return createClient(url, anon, {
-    global: token ? { headers: { Authorization: `Bearer ${token}` } } : {},
-    auth: { persistSession: false },
-  });
-}
+import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const getOnboarding = createServerFn({ method: "GET" })
-  .inputValidator((d: unknown) => (d ?? {}) as { token?: string })
-  .handler(async ({ data }) => {
-    const supabase = getClient(data.token);
-    const { data: u } = await supabase.auth.getUser();
-    if (!u.user) return { intro_seen: true, tutorial_dismissed: [] as string[] };
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
     const { data: row } = await supabase
       .from("profiles")
       .select("intro_seen, tutorial_dismissed")
-      .eq("id", u.user.id)
+      .eq("id", userId)
       .maybeSingle();
     return {
       intro_seen: row?.intro_seen ?? false,
-      tutorial_dismissed: (row?.tutorial_dismissed as string[]) ?? [],
+      tutorial_dismissed: ((row?.tutorial_dismissed as string[] | null) ?? []) as string[],
     };
   });
 
 export const markIntroSeen = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => (d ?? {}) as { token?: string })
-  .handler(async ({ data }) => {
-    const supabase = getClient(data.token);
-    const { data: u } = await supabase.auth.getUser();
-    if (!u.user) return { ok: false };
-    await supabase.from("profiles").upsert({ id: u.user.id, intro_seen: true });
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    await supabase.from("profiles").upsert({ id: userId, intro_seen: true });
     return { ok: true };
   });
 
 export const dismissTutorial = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => d as { key: string; token?: string })
-  .handler(async ({ data }) => {
-    const supabase = getClient(data.token);
-    const { data: u } = await supabase.auth.getUser();
-    if (!u.user) return { ok: false };
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i) => z.object({ key: z.string().min(1).max(64) }).parse(i))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
     const { data: row } = await supabase
       .from("profiles")
       .select("tutorial_dismissed")
-      .eq("id", u.user.id)
+      .eq("id", userId)
       .maybeSingle();
-    const list = new Set<string>((row?.tutorial_dismissed as string[]) ?? []);
+    const list = new Set<string>(((row?.tutorial_dismissed as string[] | null) ?? []) as string[]);
     list.add(data.key);
     await supabase
       .from("profiles")
-      .upsert({ id: u.user.id, tutorial_dismissed: Array.from(list) });
+      .upsert({ id: userId, tutorial_dismissed: Array.from(list) });
     return { ok: true };
   });
