@@ -103,17 +103,13 @@ function MatrixPage() {
                         const done = lookup.get(`${h.id}|${d}`);
                         return (
                           <td key={d} className="p-[1px]">
-                            <button
-                              onClick={async () => {
-                                await toggle({ data: { habit_id: h.id, log_date: d } });
-                                reload();
-                              }}
+                            <MagneticCell
+                              filled={!!done}
+                              opacity={TIER_OPACITY[h.tier] ?? 1}
                               title={`${d} · ${done ? "completed" : "—"}`}
-                              className={cn(
-                                "h-3.5 w-3.5 transition-all hover:ring-1 hover:ring-gold",
-                                done ? "bg-gold" : "bg-graphite",
-                              )}
-                              style={done ? { opacity: TIER_OPACITY[h.tier] ?? 1 } : undefined}
+                              onClick={() => {
+                                toggle({ data: { habit_id: h.id, log_date: d } });
+                              }}
                             />
                           </td>
                         );
@@ -130,6 +126,12 @@ function MatrixPage() {
           <Panel title="Consistency" eyebrow="30-day weighted">
             <div className="flex flex-col items-center">
               <RadialScore value={score.score} size={140} stroke={2} label="Score" />
+              <CountUp
+                to={score.score}
+                trigger={`m-${tick}`}
+                className="mt-2 font-mono text-[11px] text-ash tabular tracking-widest uppercase"
+                format={(n) => `${Math.round(n)}/100 weighted`}
+              />
             </div>
             <div className="mt-6 space-y-3">
               {score.tierBreakdown.map((t: any) => (
