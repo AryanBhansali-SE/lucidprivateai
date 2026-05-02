@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
  * Drifting orbs + ink-bloom backdrop.
  * Pure presentational. Mouse-parallax + scroll-parallax.
  */
-export function AtmosphericBackdrop({ scrollTarget }: { scrollTarget?: React.RefObject<HTMLElement> }) {
+export function AtmosphericBackdrop({ scrollTarget }: { scrollTarget?: React.RefObject<HTMLElement | null> }) {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const sx = useSpring(mx, { stiffness: 40, damping: 20, mass: 1.2 });
