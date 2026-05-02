@@ -9,7 +9,7 @@ import {
 } from "@/server/insights.functions";
 import { Panel } from "@/components/lucid/Panel";
 import { StaggerReveal, RevealItem } from "@/components/lucid/motion/StaggerReveal";
-import { Sparkles, RefreshCw, AlertTriangle, TrendingUp, Activity, Trophy } from "lucide-react";
+import { RefreshCw, AlertTriangle, TrendingUp, Activity, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
