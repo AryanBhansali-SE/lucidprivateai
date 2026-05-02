@@ -324,6 +324,7 @@ function PulsePage() {
         </RevealItem>
       )}
     </StaggerReveal>
+    </>
   );
 }
 
