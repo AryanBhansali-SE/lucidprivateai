@@ -43,12 +43,15 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin },
+          options: { emailRedirectTo: `${window.location.origin}/pulse` },
         });
         if (error) throw error;
         toast.success("Account created");
       }
-      navigate({ to: "/pulse" });
+      // Do NOT navigate here. The useEffect above watches `session` and will
+      // navigate to /pulse once onAuthStateChange has propagated the new
+      // session into React state. Navigating early causes the guard on
+      // /_authenticated to see a stale null session and bounce back to /auth.
     } catch (err: any) {
       toast.error(err?.message ?? "Authentication failed");
     } finally {
