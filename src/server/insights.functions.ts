@@ -302,9 +302,9 @@ Sentences should be short and observation-led. No emoji. Today is ${today}.`;
         [
           {
             user_id: userId,
-            daily_priority: parsed.daily_priority as unknown as Record<string, unknown>,
-            patterns: parsed.patterns as unknown as Record<string, unknown>,
-            goal_diagnoses: parsed.goal_diagnoses as unknown as Record<string, unknown>,
+            daily_priority: parsed.daily_priority as never,
+            patterns: parsed.patterns as never,
+            goal_diagnoses: parsed.goal_diagnoses as never,
             generated_at: generatedAt,
           },
         ],
