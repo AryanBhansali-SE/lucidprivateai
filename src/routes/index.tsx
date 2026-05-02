@@ -186,24 +186,14 @@ function HeroScene() {
           A Private Performance Terminal
         </motion.div>
 
-        <h1 className="font-serif text-[clamp(3.5rem,11vw,9rem)] leading-[0.95] text-[oklch(0.22_0.018_265)] mb-6">
-          {"Lucid".split("").map((c, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 60, filter: "blur(20px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{
-                duration: 1.4,
-                delay: 0.4 + i * 0.12,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="inline-block"
-              style={i === 2 ? { fontStyle: "italic", color: "oklch(0.62 0.16 35)" } : undefined}
-            >
-              {c}
-            </motion.span>
-          ))}
-        </h1>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="font-serif text-[clamp(3.5rem,11vw,9rem)] leading-[0.95] text-[oklch(0.22_0.018_265)] mb-6"
+        >
+          Lu<span style={{ fontStyle: "italic", color: "oklch(0.62 0.16 35)" }}>c</span>id
+        </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
