@@ -19,6 +19,7 @@ import { Plus, X, Trash2, Check } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useInsights } from "@/components/lucid/InsightsPanels";
+import { TutorialPopover } from "@/components/lucid/tutorial/TutorialPopover";
 
 export const Route = createFileRoute("/_authenticated/goals")({
   head: () => ({
@@ -50,7 +51,14 @@ function GoalsPage() {
   }, [reload]);
 
   return (
-    <div className="space-y-6">
+    <>
+      <TutorialPopover
+        tutorialKey="goals"
+        title="Objectives & Key Results."
+        body="Each goal breaks into measurable key results. The Analyst grades your trajectory with a red/amber/green dot."
+        position="bottom-right"
+      />
+      <div className="space-y-6">
       <Panel
         title="Objectives & Key Results"
         eyebrow={`${goals.length} defined`}
@@ -143,6 +151,7 @@ function GoalsPage() {
 
       {open && <GoalDrawer id={open} onClose={() => setOpen(null)} onChanged={reload} />}
     </div>
+    </>
   );
 }
 
