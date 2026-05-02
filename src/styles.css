@@ -58,18 +58,17 @@
 .dark {
   --radius: 3px;
 
-  /* Bone & Ink palette — light, soft, bold */
-  /* Token names kept; semantics inverted to a light theme. */
-  --obsidian: oklch(0.95 0.008 75);     /* page base — bone/sand #F2EFE8 */
-  --charcoal: oklch(0.975 0.006 75);    /* elevated surface — porcelain #FBF9F4 */
-  --graphite: oklch(0.92 0.008 75);     /* muted surface */
-  --hairline: oklch(0.86 0.010 75);     /* hairline border, soft */
-  --bone: oklch(0.16 0.020 265);        /* deep ink text #0E1116 */
-  --ash: oklch(0.48 0.015 260);         /* secondary muted text */
-  /* "gold" token name kept; value is Solar Coral */
-  --gold: oklch(0.66 0.20 32);          /* solar coral #FF5A3C, slightly deeper for light bg contrast */
-  --gold-dim: oklch(0.58 0.18 290);     /* iris secondary for variety */
-  --gold-soft: oklch(0.66 0.20 32 / 0.12);
+  /* Bone & Ink palette — softened, low-glare */
+  --obsidian: oklch(0.91 0.012 75);     /* page base — soft warm bone */
+  --charcoal: oklch(0.935 0.010 75);    /* elevated surface — gentle, not pure white */
+  --graphite: oklch(0.88 0.012 75);     /* muted surface */
+  --hairline: oklch(0.80 0.014 75);     /* hairline border, visible but soft */
+  --bone: oklch(0.22 0.018 265);        /* ink text — softened from near-black */
+  --ash: oklch(0.50 0.015 260);         /* secondary muted text */
+  /* "gold" token name kept; value is a calmer terracotta-coral */
+  --gold: oklch(0.62 0.16 35);          /* deeper, less glaring coral */
+  --gold-dim: oklch(0.55 0.14 290);     /* iris secondary */
+  --gold-soft: oklch(0.62 0.16 35 / 0.10);
 
   --background: var(--obsidian);
   --foreground: var(--bone);
