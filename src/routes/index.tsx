@@ -6,6 +6,7 @@ import { AtmosphericBackdrop } from "@/components/lucid/intro/AtmosphericScene";
 import { SceneBlock, DriftingChip } from "@/components/lucid/intro/IntroScenes";
 import { LiveMatrixPreview } from "@/components/lucid/intro/LiveMatrixPreview";
 import { ResearchSection, PillarsSection } from "@/components/lucid/intro/ResearchSection";
+import { FeatureTabs } from "@/components/lucid/intro/FeatureTabs";
 import { LUCID_TWEEN } from "@/components/lucid/motion/ease";
 
 export const Route = createFileRoute("/")({
@@ -80,6 +81,9 @@ function LandingPage() {
           body="Most apps shout. Lucid keeps its voice down. A measured, banking-grade interface for the things that actually compound — habits, objectives, and the words you write to yourself."
         />
       </Scene>
+
+      {/* Feature tabs — what we offer at a glance */}
+      <FeatureTabs />
 
       {/* Scene 3 — Habit Matrix with live preview */}
       <section id="habits" className="relative min-h-[90svh] flex items-center px-6 md:px-16 py-24">

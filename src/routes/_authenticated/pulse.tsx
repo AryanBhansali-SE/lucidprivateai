@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { DailyPriorityPanel, PatternsPanel } from "@/components/lucid/InsightsPanels";
+import { DataTerminal } from "@/components/lucid/DataTerminal";
 import { TutorialPopover } from "@/components/lucid/tutorial/TutorialPopover";
 
 export const Route = createFileRoute("/_authenticated/pulse")({
@@ -138,6 +139,17 @@ function PulsePage() {
             </div>
           </div>
         </div>
+      </RevealItem>
+
+      {/* Dense terminal stats strip */}
+      <RevealItem>
+        <DataTerminal
+          trend={pulse.trend}
+          todayScore={pulse.todayScore}
+          delta={pulse.delta}
+          activeGoals={pulse.activeGoals}
+          journalStreak={pulse.journalStreak}
+        />
       </RevealItem>
 
       {/* AI Insights — Daily Priority + Patterns */}
