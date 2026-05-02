@@ -1,44 +1,42 @@
-import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 export function Panel({
   title,
-  subtitle,
+  eyebrow,
   action,
   children,
   className,
-  dense,
+  bodyClassName,
 }: {
   title?: string;
-  subtitle?: string;
+  eyebrow?: string;
   action?: ReactNode;
   children: ReactNode;
   className?: string;
-  dense?: boolean;
+  bodyClassName?: string;
 }) {
   return (
     <section
       className={cn(
-        "rounded-lg border border-border bg-card text-card-foreground overflow-hidden",
+        "border border-border bg-card rounded-sm overflow-hidden",
         className,
       )}
     >
-      {(title || action) && (
-        <header className="flex items-center justify-between px-4 py-2.5 border-b border-border">
+      {(title || action || eyebrow) && (
+        <header className="flex items-baseline justify-between gap-4 px-5 py-4 border-b border-border">
           <div className="min-w-0">
+            {eyebrow && <div className="label-cap mb-1">{eyebrow}</div>}
             {title && (
-              <h2 className="text-xs font-semibold tracking-tight uppercase font-mono">
+              <h2 className="font-serif text-[18px] leading-none text-bone truncate">
                 {title}
               </h2>
-            )}
-            {subtitle && (
-              <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{subtitle}</p>
             )}
           </div>
           {action && <div className="shrink-0">{action}</div>}
         </header>
       )}
-      <div className={cn(dense ? "p-0" : "p-4")}>{children}</div>
+      <div className={cn("p-5", bodyClassName)}>{children}</div>
     </section>
   );
 }
@@ -46,30 +44,55 @@ export function Panel({
 export function Stat({
   label,
   value,
-  delta,
+  unit,
+  hint,
   positive,
+  negative,
 }: {
   label: string;
-  value: string;
-  delta?: string;
+  value: string | number;
+  unit?: string;
+  hint?: string;
   positive?: boolean;
+  negative?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-1 p-4 border-r last:border-r-0 border-border">
-      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-        {label}
-      </span>
-      <span className="text-xl font-semibold tracking-tight tabular-nums">{value}</span>
-      {delta && (
+    <div className="flex flex-col gap-1.5">
+      <span className="label-cap">{label}</span>
+      <div className="flex items-baseline gap-1.5">
         <span
           className={cn(
-            "text-[11px] font-mono",
-            positive ? "text-success" : "text-destructive",
+            "font-serif text-[34px] leading-none num",
+            positive && "text-gold",
+            negative && "text-destructive",
+            !positive && !negative && "text-bone",
           )}
         >
-          {positive ? "▲" : "▼"} {delta}
+          {value}
         </span>
+        {unit && <span className="text-ash text-sm font-mono">{unit}</span>}
+      </div>
+      {hint && <span className="text-[11px] text-ash font-mono">{hint}</span>}
+    </div>
+  );
+}
+
+export function KPIBar({ value, label }: { value: number; label?: string }) {
+  const pct = Math.max(0, Math.min(100, Math.round(value * 100)));
+  return (
+    <div className="space-y-1.5">
+      {label && (
+        <div className="flex items-baseline justify-between">
+          <span className="label-cap">{label}</span>
+          <span className="font-mono text-xs text-bone tabular">{pct}%</span>
+        </div>
       )}
+      <div className="h-[3px] w-full bg-graphite overflow-hidden">
+        <div
+          className="h-full brushed-gold transition-all duration-500"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
     </div>
   );
 }

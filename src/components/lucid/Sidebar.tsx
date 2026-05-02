@@ -1,66 +1,123 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Activity, Youtube, Sparkles, Settings } from "lucide-react";
+import { LayoutDashboard, Grid3x3, Target, BookText, Settings, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const nav = [
-  { to: "/", label: "Overview", icon: LayoutDashboard },
-  { to: "/habits", label: "Habits", icon: Activity },
-  { to: "/youtube", label: "YouTube", icon: Youtube },
-  { to: "/projects", label: "AI Projects", icon: Sparkles },
+interface NavItem {
+  to: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  glyph: string;
+}
+
+const NAV: NavItem[] = [
+  { to: "/pulse", label: "Pulse", icon: LayoutDashboard, glyph: "I" },
+  { to: "/matrix", label: "Habit Matrix", icon: Grid3x3, glyph: "II" },
+  { to: "/goals", label: "Objectives", icon: Target, glyph: "III" },
+  { to: "/journal", label: "Journal", icon: BookText, glyph: "IV" },
 ];
 
-export function Sidebar() {
+export function Sidebar({
+  collapsed,
+  onToggle,
+}: {
+  collapsed: boolean;
+  onToggle: () => void;
+}) {
   const path = useRouterState({ select: (s) => s.location.pathname });
 
   return (
-    <aside className="hidden md:flex md:w-56 lg:w-60 shrink-0 flex-col border-r border-border bg-surface">
-      <div className="h-14 flex items-center px-5 border-b border-border">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded-sm bg-primary grid place-items-center">
-            <div className="h-2 w-2 rounded-[1px] bg-primary-foreground" />
+    <aside
+      className={cn(
+        "hidden md:flex shrink-0 flex-col border-r border-border bg-card transition-[width] duration-200",
+        collapsed ? "w-[60px]" : "w-[220px]",
+      )}
+    >
+      {/* Brand */}
+      <div className="h-16 flex items-center px-4 border-b border-border">
+        {collapsed ? (
+          <div className="w-full grid place-items-center">
+            <span className="font-serif italic text-gold text-xl tracking-tight">L</span>
           </div>
-          <span className="font-mono text-sm tracking-tight font-semibold">LUCID</span>
-          <span className="font-mono text-[10px] text-muted-foreground ml-1">v1.0</span>
-        </Link>
+        ) : (
+          <div className="flex items-baseline gap-2">
+            <span className="font-serif italic text-gold text-2xl leading-none">Lucid</span>
+            <span className="font-mono text-[9px] text-ash uppercase tracking-[0.2em]">
+              Private
+            </span>
+          </div>
+        )}
       </div>
 
-      <nav className="flex-1 p-3 space-y-0.5">
-        {nav.map((item) => {
-          const active = path === item.to;
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={cn(
-                "flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm transition-colors",
-                active
-                  ? "bg-secondary text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/60",
-              )}
-            >
-              <Icon className="h-4 w-4" />
-              <span>{item.label}</span>
-              {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />}
-            </Link>
-          );
-        })}
+      {/* Nav */}
+      <nav className="flex-1 py-6 px-2">
+        {!collapsed && (
+          <div className="px-3 mb-3 label-cap">Operations</div>
+        )}
+        <ul className="space-y-px">
+          {NAV.map((item) => {
+            const active = path.startsWith(item.to);
+            return (
+              <li key={item.to}>
+                <Link
+                  to={item.to}
+                  className={cn(
+                    "group flex items-center gap-3 px-3 py-2 rounded-sm transition-colors relative",
+                    active
+                      ? "bg-graphite text-bone"
+                      : "text-ash hover:text-bone hover:bg-graphite/50",
+                  )}
+                  title={collapsed ? item.label : undefined}
+                >
+                  {active && (
+                    <span className="absolute left-0 top-1.5 bottom-1.5 w-px bg-gold" />
+                  )}
+                  <span
+                    className={cn(
+                      "font-mono text-[10px] tracking-wider w-6 shrink-0 text-center",
+                      active ? "text-gold" : "text-ash/60",
+                    )}
+                  >
+                    {item.glyph}
+                  </span>
+                  {!collapsed && (
+                    <span className="text-[13px] font-medium tracking-tight">
+                      {item.label}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
 
-      <div className="p-3 border-t border-border">
-        <button className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors">
-          <Settings className="h-4 w-4" />
-          Settings
+      {/* Bottom: settings + collapse */}
+      <div className="border-t border-border p-2 space-y-px">
+        <Link
+          to="/settings"
+          className={cn(
+            "flex items-center gap-3 px-3 py-2 rounded-sm text-ash hover:text-bone hover:bg-graphite/50 transition-colors",
+            path.startsWith("/settings") && "bg-graphite text-bone",
+          )}
+          title={collapsed ? "Settings" : undefined}
+        >
+          <Settings className="h-3.5 w-3.5 shrink-0" strokeWidth={1.25} />
+          {!collapsed && <span className="text-[13px]">Settings</span>}
+        </Link>
+        <button
+          onClick={onToggle}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-ash hover:text-bone hover:bg-graphite/50 transition-colors"
+          title={collapsed ? "Expand" : "Collapse"}
+        >
+          {collapsed ? (
+            <ChevronsRight className="h-3.5 w-3.5 shrink-0" strokeWidth={1.25} />
+          ) : (
+            <>
+              <ChevronsLeft className="h-3.5 w-3.5 shrink-0" strokeWidth={1.25} />
+              <span className="text-[13px]">Distraction-free</span>
+            </>
+          )}
         </button>
-        <div className="mt-3 px-2.5 flex items-center gap-2">
-          <div className="h-7 w-7 rounded-full bg-gradient-to-br from-primary to-primary/40 grid place-items-center text-[11px] font-semibold text-primary-foreground">
-            JS
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="text-xs font-medium truncate">Operator</div>
-            <div className="text-[10px] font-mono text-muted-foreground truncate">online</div>
-          </div>
-        </div>
       </div>
     </aside>
   );
