@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminBootstrapRouteImport } from './routes/admin-bootstrap'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -17,10 +18,16 @@ import { Route as AuthenticatedPulseRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedMatrixRouteImport } from './routes/_authenticated/matrix'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
 import { Route as AuthenticatedGoalsRouteImport } from './routes/_authenticated/goals'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminBootstrapRoute = AdminBootstrapRouteImport.update({
+  id: '/admin-bootstrap',
+  path: '/admin-bootstrap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -57,10 +64,17 @@ const AuthenticatedGoalsRoute = AuthenticatedGoalsRouteImport.update({
   path: '/goals',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin-bootstrap': typeof AdminBootstrapRoute
   '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/goals': typeof AuthenticatedGoalsRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/matrix': typeof AuthenticatedMatrixRoute
@@ -69,7 +83,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin-bootstrap': typeof AdminBootstrapRoute
   '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/goals': typeof AuthenticatedGoalsRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/matrix': typeof AuthenticatedMatrixRoute
@@ -80,7 +96,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/admin-bootstrap': typeof AdminBootstrapRoute
   '/auth': typeof AuthRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/goals': typeof AuthenticatedGoalsRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/matrix': typeof AuthenticatedMatrixRoute
@@ -91,19 +109,32 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin-bootstrap'
     | '/auth'
+    | '/admin'
     | '/goals'
     | '/journal'
     | '/matrix'
     | '/pulse'
     | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/goals' | '/journal' | '/matrix' | '/pulse' | '/settings'
+  to:
+    | '/'
+    | '/admin-bootstrap'
+    | '/auth'
+    | '/admin'
+    | '/goals'
+    | '/journal'
+    | '/matrix'
+    | '/pulse'
+    | '/settings'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/admin-bootstrap'
     | '/auth'
+    | '/_authenticated/admin'
     | '/_authenticated/goals'
     | '/_authenticated/journal'
     | '/_authenticated/matrix'
@@ -114,6 +145,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AdminBootstrapRoute: typeof AdminBootstrapRoute
   AuthRoute: typeof AuthRoute
 }
 
@@ -124,6 +156,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-bootstrap': {
+      id: '/admin-bootstrap'
+      path: '/admin-bootstrap'
+      fullPath: '/admin-bootstrap'
+      preLoaderRoute: typeof AdminBootstrapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -175,10 +214,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedGoalsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedGoalsRoute: typeof AuthenticatedGoalsRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
   AuthenticatedMatrixRoute: typeof AuthenticatedMatrixRoute
@@ -187,6 +234,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedGoalsRoute: AuthenticatedGoalsRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
   AuthenticatedMatrixRoute: AuthenticatedMatrixRoute,
@@ -201,6 +249,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AdminBootstrapRoute: AdminBootstrapRoute,
   AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
