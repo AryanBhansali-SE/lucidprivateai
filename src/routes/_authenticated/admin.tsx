@@ -65,7 +65,7 @@ function AdminPanel() {
                 <Panel key={m.k}>
                   <div className="label-cap">{m.k}</div>
                   <div className="font-mono text-3xl text-bone mt-2">
-                    <CountUp value={m.v} />
+                    <CountUp to={m.v} />
                   </div>
                 </Panel>
               ))}
