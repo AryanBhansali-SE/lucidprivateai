@@ -91,11 +91,9 @@ export function DailyPriorityPanel() {
     <Panel
       title="Today's Priority"
       eyebrow={
-        <span className="flex items-center gap-1.5">
-          <Sparkles className="h-3 w-3" strokeWidth={1.5} />
-          AI Analysis
-          {data && <span className="text-ash/60">· {relativeTime(data.generated_at)}</span>}
-        </span>
+        data
+          ? `AI · ${relativeTime(data.generated_at)}`
+          : "AI Analysis"
       }
       action={
         <button
@@ -172,7 +170,7 @@ export function PatternsPanel() {
       eyebrow={`${data.patterns.length} signal${data.patterns.length === 1 ? "" : "s"}`}
       bodyClassName="p-0"
     >
-      <StaggerReveal className="divide-y divide-hairline" stagger={0.05}>
+      <StaggerReveal className="divide-y divide-hairline">
         {data.patterns.map((p, i) => {
           const Icon = categoryIcon[p.category];
           return (
