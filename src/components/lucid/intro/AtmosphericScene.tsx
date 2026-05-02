@@ -13,14 +13,24 @@ export function AtmosphericBackdrop({ scrollTarget }: { scrollTarget?: React.Ref
   const sy = useSpring(my, { stiffness: 30, damping: 22, mass: 1.4 });
 
   useEffect(() => {
+    let raf = 0;
+    let pendingX = 0;
+    let pendingY = 0;
     function handle(e: MouseEvent) {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      mx.set(x);
-      my.set(y);
+      pendingX = (e.clientX / window.innerWidth - 0.5) * 2;
+      pendingY = (e.clientY / window.innerHeight - 0.5) * 2;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        mx.set(pendingX);
+        my.set(pendingY);
+        raf = 0;
+      });
     }
-    window.addEventListener("mousemove", handle);
-    return () => window.removeEventListener("mousemove", handle);
+    window.addEventListener("mousemove", handle, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handle);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [mx, my]);
 
   const { scrollYProgress } = useScroll(
