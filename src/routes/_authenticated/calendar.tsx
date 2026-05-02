@@ -124,7 +124,7 @@ function CalendarPage() {
       </div>
 
       {connected === false && (
-        <Panel title="Connect Google Calendar" subtitle="One-time consent. Per-user OAuth.">
+        <Panel title="Connect Google Calendar" eyebrow="One-time consent. Per-user OAuth.">
           <div className="flex items-center justify-between gap-4 py-4">
             <p className="text-sm text-ash max-w-md">
               Lucid will read your upcoming events and write events you schedule
@@ -141,7 +141,7 @@ function CalendarPage() {
         <>
           <Panel
             title="Quick schedule"
-            subtitle={email ? `Writing to ${email}` : "Primary calendar"}
+            eyebrow={email ? `Writing to ${email}` : "Primary calendar"}
           >
             <form
               onSubmit={handleSchedule}
@@ -174,7 +174,7 @@ function CalendarPage() {
 
           <Panel
             title="Next 7 days"
-            subtitle={`${events.length} event${events.length === 1 ? "" : "s"}`}
+            eyebrow={`${events.length} event${events.length === 1 ? "" : "s"}`}
           >
             {loading ? (
               <div className="text-ash text-sm py-6 font-mono">Loading…</div>
