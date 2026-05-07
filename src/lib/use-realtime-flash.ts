@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-type Table = "habit_logs" | "goals" | "key_results" | "journal_entries";
+type Table = "habit_logs" | "habits" | "goals" | "key_results" | "journal_entries";
 
 /**
  * Subscribes to a Supabase table and bumps a "tick" counter on every
