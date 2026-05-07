@@ -112,23 +112,35 @@ function MatrixPage() {
                             <div className="text-sm text-bone truncate">{h.name}</div>
                             <div className="label-cap">{h.tier}</div>
                           </div>
-                          <button
-                            onClick={async (e) => {
-                              e.stopPropagation();
-                              if (!confirm(`Remove "${h.name}"?`)) return;
-                              try {
-                                await archive({ data: { id: h.id } });
-                                toast.success("Habit removed");
-                                reload();
-                              } catch (err: any) {
-                                toast.error(err?.message ?? "Failed");
-                              }
-                            }}
-                            className="opacity-0 group-hover:opacity-100 text-ash hover:text-destructive transition-opacity shrink-0"
-                            title="Remove habit"
-                          >
-                            <Trash2 className="h-3 w-3" strokeWidth={1.25} />
-                          </button>
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditing(h);
+                              }}
+                              className="text-ash hover:text-gold"
+                              title="Edit habit"
+                            >
+                              <Pencil className="h-3 w-3" strokeWidth={1.25} />
+                            </button>
+                            <button
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                if (!confirm(`Remove "${h.name}"?`)) return;
+                                try {
+                                  await archive({ data: { id: h.id } });
+                                  toast.success("Habit removed");
+                                  reload();
+                                } catch (err: any) {
+                                  toast.error(err?.message ?? "Failed");
+                                }
+                              }}
+                              className="text-ash hover:text-destructive"
+                              title="Remove habit"
+                            >
+                              <Trash2 className="h-3 w-3" strokeWidth={1.25} />
+                            </button>
+                          </div>
                         </div>
                       </td>
                       {days.map((d) => {
