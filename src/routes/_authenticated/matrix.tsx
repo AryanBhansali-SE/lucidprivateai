@@ -254,21 +254,27 @@ function MatrixPage() {
 function AddHabitSheet({
   onClose,
   onSubmit,
+  initial,
+  title = "Define a habit",
+  submitLabel = "Commit",
 }: {
   onClose: () => void;
   onSubmit: (p: { name: string; tier: "keystone" | "core" | "supporting"; break_penalty: boolean }) => Promise<void>;
+  initial?: { name: string; tier: "keystone" | "core" | "supporting"; break_penalty: boolean };
+  title?: string;
+  submitLabel?: string;
 }) {
-  const [name, setName] = useState("");
-  const [tier, setTier] = useState<"keystone" | "core" | "supporting">("core");
-  const [bp, setBp] = useState(false);
+  const [name, setName] = useState(initial?.name ?? "");
+  const [tier, setTier] = useState<"keystone" | "core" | "supporting">(initial?.tier ?? "core");
+  const [bp, setBp] = useState(initial?.break_penalty ?? false);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-6 bg-black/60">
       <div className="w-full max-w-md bg-card border border-border rounded-sm">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
-            <div className="label-cap mb-1">New entry</div>
-            <h3 className="font-serif text-bone text-xl">Define a habit</h3>
+            <div className="label-cap mb-1">{initial ? "Edit entry" : "New entry"}</div>
+            <h3 className="font-serif text-bone text-xl">{title}</h3>
           </div>
           <button onClick={onClose} className="text-ash hover:text-bone">
             <X className="h-4 w-4" strokeWidth={1.25} />
