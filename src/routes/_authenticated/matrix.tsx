@@ -32,10 +32,12 @@ function MatrixPage() {
   const toggle = useAuthedServerFn(toggleHabitLog);
   const create = useAuthedServerFn(createHabit);
   const archive = useAuthedServerFn(archiveHabit);
+  const update = useAuthedServerFn(updateHabit);
 
   const [data, setData] = useState<any>(null);
   const [score, setScore] = useState<any>(null);
   const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<any>(null);
 
   const reload = useCallback(async () => {
     const [m, s] = await Promise.all([fetchMatrix({ data: { days: 60 } }), fetchScore()]);
@@ -47,7 +49,7 @@ function MatrixPage() {
     reload();
   }, [reload]);
 
-  const tick = useRealtimeFlash(["habit_logs"], reload);
+  const tick = useRealtimeFlash(["habit_logs", "habits"], reload);
 
   const days = useMemo(() => {
     if (!data) return [];
