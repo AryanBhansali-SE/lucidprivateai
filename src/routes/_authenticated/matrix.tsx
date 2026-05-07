@@ -7,10 +7,10 @@ import { CountUp } from "@/components/lucid/motion/CountUp";
 import { StaggerReveal, RevealItem } from "@/components/lucid/motion/StaggerReveal";
 import { useRealtimeFlash } from "@/lib/use-realtime-flash";
 import { useAuthedServerFn } from "@/lib/use-authed-server-fn";
-import { getMatrix, getScoreBundle, toggleHabitLog, createHabit } from "@/server/habits.functions";
+import { getMatrix, getScoreBundle, toggleHabitLog, createHabit, archiveHabit } from "@/server/habits.functions";
 import { addDays, toISODate, todayISO } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { TutorialPopover } from "@/components/lucid/tutorial/TutorialPopover";
 
@@ -31,6 +31,7 @@ function MatrixPage() {
   const fetchScore = useAuthedServerFn(getScoreBundle);
   const toggle = useAuthedServerFn(toggleHabitLog);
   const create = useAuthedServerFn(createHabit);
+  const archive = useAuthedServerFn(archiveHabit);
 
   const [data, setData] = useState<any>(null);
   const [score, setScore] = useState<any>(null);
@@ -104,8 +105,29 @@ function MatrixPage() {
                   {data.habits.map((h: any) => (
                     <tr key={h.id}>
                       <td className="sticky left-0 bg-card px-4 py-1.5 border-r border-border min-w-[160px]">
-                        <div className="text-sm text-bone">{h.name}</div>
-                        <div className="label-cap">{h.tier}</div>
+                        <div className="flex items-center justify-between gap-2 group">
+                          <div className="min-w-0">
+                            <div className="text-sm text-bone truncate">{h.name}</div>
+                            <div className="label-cap">{h.tier}</div>
+                          </div>
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              if (!confirm(`Remove "${h.name}"?`)) return;
+                              try {
+                                await archive({ data: { id: h.id } });
+                                toast.success("Habit removed");
+                                reload();
+                              } catch (err: any) {
+                                toast.error(err?.message ?? "Failed");
+                              }
+                            }}
+                            className="opacity-0 group-hover:opacity-100 text-ash hover:text-destructive transition-opacity shrink-0"
+                            title="Remove habit"
+                          >
+                            <Trash2 className="h-3 w-3" strokeWidth={1.25} />
+                          </button>
+                        </div>
                       </td>
                       {days.map((d) => {
                         const done = lookup.get(`${h.id}|${d}`);
