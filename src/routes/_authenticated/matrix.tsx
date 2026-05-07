@@ -31,6 +31,7 @@ function MatrixPage() {
   const fetchScore = useAuthedServerFn(getScoreBundle);
   const toggle = useAuthedServerFn(toggleHabitLog);
   const create = useAuthedServerFn(createHabit);
+  const archive = useAuthedServerFn(archiveHabit);
 
   const [data, setData] = useState<any>(null);
   const [score, setScore] = useState<any>(null);
