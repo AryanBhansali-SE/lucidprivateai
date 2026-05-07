@@ -228,6 +228,24 @@ function MatrixPage() {
           }}
         />
       )}
+      {editing && (
+        <AddHabitSheet
+          initial={{ name: editing.name, tier: editing.tier, break_penalty: editing.break_penalty }}
+          title="Edit habit"
+          submitLabel="Save"
+          onClose={() => setEditing(null)}
+          onSubmit={async (payload) => {
+            try {
+              await update({ data: { id: editing.id, ...payload } });
+              toast.success("Habit updated");
+              setEditing(null);
+              reload();
+            } catch (e: any) {
+              toast.error(e?.message ?? "Failed");
+            }
+          }}
+        />
+      )}
     </div>
     </>
   );
