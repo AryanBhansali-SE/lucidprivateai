@@ -10,7 +10,7 @@ import { useAuthedServerFn } from "@/lib/use-authed-server-fn";
 import { getMatrix, getScoreBundle, toggleHabitLog, createHabit, archiveHabit, updateHabit } from "@/server/habits.functions";
 import { addDays, toISODate, todayISO } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { Plus, X, Trash2 } from "lucide-react";
+import { Plus, X, Trash2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { TutorialPopover } from "@/components/lucid/tutorial/TutorialPopover";
 
