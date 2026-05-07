@@ -7,10 +7,10 @@ import { CountUp } from "@/components/lucid/motion/CountUp";
 import { StaggerReveal, RevealItem } from "@/components/lucid/motion/StaggerReveal";
 import { useRealtimeFlash } from "@/lib/use-realtime-flash";
 import { useAuthedServerFn } from "@/lib/use-authed-server-fn";
-import { getMatrix, getScoreBundle, toggleHabitLog, createHabit, archiveHabit } from "@/server/habits.functions";
+import { getMatrix, getScoreBundle, toggleHabitLog, createHabit, archiveHabit, updateHabit } from "@/server/habits.functions";
 import { addDays, toISODate, todayISO } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { Plus, X, Trash2 } from "lucide-react";
+import { Plus, X, Trash2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { TutorialPopover } from "@/components/lucid/tutorial/TutorialPopover";
 
@@ -32,10 +32,12 @@ function MatrixPage() {
   const toggle = useAuthedServerFn(toggleHabitLog);
   const create = useAuthedServerFn(createHabit);
   const archive = useAuthedServerFn(archiveHabit);
+  const update = useAuthedServerFn(updateHabit);
 
   const [data, setData] = useState<any>(null);
   const [score, setScore] = useState<any>(null);
   const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<any>(null);
 
   const reload = useCallback(async () => {
     const [m, s] = await Promise.all([fetchMatrix({ data: { days: 60 } }), fetchScore()]);
@@ -47,7 +49,7 @@ function MatrixPage() {
     reload();
   }, [reload]);
 
-  const tick = useRealtimeFlash(["habit_logs"], reload);
+  const tick = useRealtimeFlash(["habit_logs", "habits"], reload);
 
   const days = useMemo(() => {
     if (!data) return [];
@@ -110,23 +112,35 @@ function MatrixPage() {
                             <div className="text-sm text-bone truncate">{h.name}</div>
                             <div className="label-cap">{h.tier}</div>
                           </div>
-                          <button
-                            onClick={async (e) => {
-                              e.stopPropagation();
-                              if (!confirm(`Remove "${h.name}"?`)) return;
-                              try {
-                                await archive({ data: { id: h.id } });
-                                toast.success("Habit removed");
-                                reload();
-                              } catch (err: any) {
-                                toast.error(err?.message ?? "Failed");
-                              }
-                            }}
-                            className="opacity-0 group-hover:opacity-100 text-ash hover:text-destructive transition-opacity shrink-0"
-                            title="Remove habit"
-                          >
-                            <Trash2 className="h-3 w-3" strokeWidth={1.25} />
-                          </button>
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditing(h);
+                              }}
+                              className="text-ash hover:text-gold"
+                              title="Edit habit"
+                            >
+                              <Pencil className="h-3 w-3" strokeWidth={1.25} />
+                            </button>
+                            <button
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                if (!confirm(`Remove "${h.name}"?`)) return;
+                                try {
+                                  await archive({ data: { id: h.id } });
+                                  toast.success("Habit removed");
+                                  reload();
+                                } catch (err: any) {
+                                  toast.error(err?.message ?? "Failed");
+                                }
+                              }}
+                              className="text-ash hover:text-destructive"
+                              title="Remove habit"
+                            >
+                              <Trash2 className="h-3 w-3" strokeWidth={1.25} />
+                            </button>
+                          </div>
                         </div>
                       </td>
                       {days.map((d) => {
@@ -214,6 +228,24 @@ function MatrixPage() {
           }}
         />
       )}
+      {editing && (
+        <AddHabitSheet
+          initial={{ name: editing.name, tier: editing.tier, break_penalty: editing.break_penalty }}
+          title="Edit habit"
+          submitLabel="Save"
+          onClose={() => setEditing(null)}
+          onSubmit={async (payload) => {
+            try {
+              await update({ data: { id: editing.id, ...payload } });
+              toast.success("Habit updated");
+              setEditing(null);
+              reload();
+            } catch (e: any) {
+              toast.error(e?.message ?? "Failed");
+            }
+          }}
+        />
+      )}
     </div>
     </>
   );
@@ -222,21 +254,27 @@ function MatrixPage() {
 function AddHabitSheet({
   onClose,
   onSubmit,
+  initial,
+  title = "Define a habit",
+  submitLabel = "Commit",
 }: {
   onClose: () => void;
   onSubmit: (p: { name: string; tier: "keystone" | "core" | "supporting"; break_penalty: boolean }) => Promise<void>;
+  initial?: { name: string; tier: "keystone" | "core" | "supporting"; break_penalty: boolean };
+  title?: string;
+  submitLabel?: string;
 }) {
-  const [name, setName] = useState("");
-  const [tier, setTier] = useState<"keystone" | "core" | "supporting">("core");
-  const [bp, setBp] = useState(false);
+  const [name, setName] = useState(initial?.name ?? "");
+  const [tier, setTier] = useState<"keystone" | "core" | "supporting">(initial?.tier ?? "core");
+  const [bp, setBp] = useState(initial?.break_penalty ?? false);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-6 bg-black/60">
       <div className="w-full max-w-md bg-card border border-border rounded-sm">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
-            <div className="label-cap mb-1">New entry</div>
-            <h3 className="font-serif text-bone text-xl">Define a habit</h3>
+            <div className="label-cap mb-1">{initial ? "Edit entry" : "New entry"}</div>
+            <h3 className="font-serif text-bone text-xl">{title}</h3>
           </div>
           <button onClick={onClose} className="text-ash hover:text-bone">
             <X className="h-4 w-4" strokeWidth={1.25} />
@@ -306,7 +344,7 @@ function AddHabitSheet({
             type="submit"
             className="w-full brushed-gold text-obsidian font-mono uppercase text-xs tracking-[0.2em] py-3 hover:opacity-90 transition-opacity"
           >
-            Commit
+            {submitLabel}
           </button>
         </form>
       </div>
