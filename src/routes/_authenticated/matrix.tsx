@@ -344,7 +344,7 @@ function AddHabitSheet({
             type="submit"
             className="w-full brushed-gold text-obsidian font-mono uppercase text-xs tracking-[0.2em] py-3 hover:opacity-90 transition-opacity"
           >
-            Commit
+            {submitLabel}
           </button>
         </form>
       </div>
